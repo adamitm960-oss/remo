@@ -8,7 +8,6 @@
     <title>ريمو AI</title>
 
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,12 +17,21 @@
         body {
             min-height: 100vh;
             font-family: Arial, Tahoma, sans-serif;
+
             background:
-                radial-gradient(circle at top right, #202a4a 0%, transparent 35%),
-                radial-gradient(circle at bottom left, #24163d 0%, transparent 35%),
+                radial-gradient(
+                    circle at top right,
+                    #202a4a 0%,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom left,
+                    #24163d 0%,
+                    transparent 35%
+                ),
                 #080b12;
 
-            color: #fff;
+            color: white;
 
             display: flex;
             justify-content: center;
@@ -32,19 +40,14 @@
             padding: 20px;
         }
 
-
-        /* =========================
-           CHAT
-        ========================= */
-
         .chat {
             width: 100%;
             max-width: 850px;
             height: 700px;
 
-            background: rgba(17, 24, 39, .92);
+            background: rgba(17, 24, 39, 0.94);
 
-            border: 1px solid rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,0.08);
 
             border-radius: 24px;
 
@@ -54,31 +57,28 @@
             flex-direction: column;
 
             box-shadow:
-                0 30px 80px rgba(0,0,0,.55);
+                0 30px 80px rgba(0,0,0,0.55);
 
             backdrop-filter: blur(20px);
         }
 
-
-        /* =========================
-           HEADER
-        ========================= */
+        /* HEADER */
 
         .header {
             height: 85px;
 
             padding: 18px 22px;
 
-            background: rgba(255,255,255,.03);
+            background: rgba(255,255,255,0.03);
 
-            border-bottom: 1px solid rgba(255,255,255,.07);
+            border-bottom:
+                1px solid rgba(255,255,255,0.07);
 
             display: flex;
             align-items: center;
 
             gap: 14px;
         }
-
 
         .avatar {
             width: 50px;
@@ -101,25 +101,20 @@
             font-weight: bold;
 
             box-shadow:
-                0 0 25px rgba(99,102,241,.35);
+                0 0 25px rgba(99,102,241,0.35);
         }
-
 
         .header h1 {
             font-size: 20px;
             margin-bottom: 5px;
         }
 
-
         .status {
             color: #22c55e;
             font-size: 13px;
         }
 
-
-        /* =========================
-           MESSAGES
-        ========================= */
+        /* MESSAGES */
 
         .messages {
             flex: 1;
@@ -134,17 +129,14 @@
             gap: 15px;
         }
 
-
         .messages::-webkit-scrollbar {
             width: 6px;
         }
-
 
         .messages::-webkit-scrollbar-thumb {
             background: #374151;
             border-radius: 10px;
         }
-
 
         .message {
             max-width: 80%;
@@ -159,12 +151,10 @@
 
             word-break: break-word;
 
-            animation: messageIn .2s ease;
+            animation: messageIn 0.2s ease;
         }
 
-
         @keyframes messageIn {
-
             from {
                 opacity: 0;
                 transform: translateY(8px);
@@ -174,9 +164,7 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-
         }
-
 
         .user {
             align-self: flex-start;
@@ -191,44 +179,37 @@
             border-bottom-left-radius: 5px;
         }
 
-
         .remo {
             align-self: flex-end;
 
             background: #1b2433;
 
-            border: 1px solid rgba(255,255,255,.07);
+            border:
+                1px solid rgba(255,255,255,0.07);
 
             border-bottom-right-radius: 5px;
         }
 
-
         .typing {
-            opacity: .65;
+            opacity: 0.65;
         }
 
-
-        /* =========================
-           INPUT AREA
-        ========================= */
+        /* INPUT */
 
         .input-area {
-
             padding: 18px;
 
-            background: rgba(255,255,255,.03);
+            background: rgba(255,255,255,0.03);
 
             border-top:
-                1px solid rgba(255,255,255,.07);
+                1px solid rgba(255,255,255,0.07);
 
             display: flex;
 
             gap: 10px;
         }
 
-
         #message {
-
             flex: 1;
 
             height: 52px;
@@ -242,34 +223,28 @@
 
             border-radius: 15px;
 
-            padding:
-                0 17px;
+            padding: 0 17px;
 
             outline: none;
 
             font-size: 15px;
 
-            transition: .2s;
+            transition: 0.2s;
         }
-
 
         #message::placeholder {
             color: #6b7280;
         }
 
-
         #message:focus {
-
             border-color: #6366f1;
 
             box-shadow:
                 0 0 0 3px
-                rgba(99,102,241,.12);
+                rgba(99,102,241,0.12);
         }
 
-
         #sendBtn {
-
             height: 52px;
 
             min-width: 100px;
@@ -293,22 +268,19 @@
 
             font-weight: bold;
 
-            transition: .2s;
+            transition: 0.2s;
         }
-
 
         #sendBtn:hover {
             transform: translateY(-1px);
 
             box-shadow:
                 0 8px 25px
-                rgba(99,102,241,.25);
+                rgba(99,102,241,0.25);
         }
 
-
         #sendBtn:disabled {
-
-            opacity: .5;
+            opacity: 0.5;
 
             cursor: not-allowed;
 
@@ -317,10 +289,7 @@
             box-shadow: none;
         }
 
-
-        /* =========================
-           MOBILE
-        ========================= */
+        /* MOBILE */
 
         @media (max-width: 600px) {
 
@@ -328,48 +297,35 @@
                 padding: 0;
             }
 
-
             .chat {
-
                 height: 100vh;
 
                 max-width: none;
 
                 border-radius: 0;
-
             }
-
 
             .message {
                 max-width: 90%;
             }
 
-
             .input-area {
                 padding: 12px;
             }
 
-
             #sendBtn {
                 min-width: 80px;
             }
-
         }
-
     </style>
-
 </head>
 
 
 <body>
 
-
 <div class="chat">
 
-
-    <!-- =========================
-         HEADER
-    ========================== -->
+    <!-- HEADER -->
 
     <div class="header">
 
@@ -395,10 +351,7 @@
     </div>
 
 
-
-    <!-- =========================
-         MESSAGES
-    ========================== -->
+    <!-- MESSAGES -->
 
     <div
         class="messages"
@@ -411,17 +364,14 @@
 
             أنا ريمو.
 
-            اكتبلي أي حاجة في الخانة تحت وأنا هرد عليك.
+            اكتبلي أي حاجة وأنا هحاول أساعدك.
 
         </div>
 
     </div>
 
 
-
-    <!-- =========================
-         INPUT
-    ========================== -->
+    <!-- INPUT -->
 
     <div class="input-area">
 
@@ -441,90 +391,94 @@
 
     </div>
 
-
 </div>
-
 
 
 <script>
 
-
-    // ==========================================
-    // إعدادات LiteLLM
-    // ==========================================
+    /*
+    ==================================================
+    REMO API
+    ==================================================
+    */
 
     const API_URL =
-        "http://127.0.0.1:4000/v1/chat/completions";
+        "https://hull-med-gcc-molecules.trycloudflare.com/v1/chat/completions";
 
 
-    // مفتاح LiteLLM
-    // للتجربة المحلية فقط
+    /*
+    ==================================================
+    LITELLM KEY
+
+    ده مفتاح الاختبار المحلي بتاعك.
+    لا ترفع نسخة تحتوي عليه إلى GitHub Public.
+    ==================================================
+    */
+
     const API_KEY =
         "sk-remo-2026";
 
 
-    // اسم الموديل
+    /*
+    ==================================================
+    MODEL
+    ==================================================
+    */
+
     const MODEL =
         "remo";
 
 
-
-    // ==========================================
-    // عناصر الصفحة
-    // ==========================================
+    /*
+    ==================================================
+    ELEMENTS
+    ==================================================
+    */
 
     const input =
         document.getElementById("message");
 
-
     const sendBtn =
         document.getElementById("sendBtn");
 
-
     const messages =
         document.getElementById("messages");
-
 
     const status =
         document.getElementById("status");
 
 
-
-    // ==========================================
-    // إضافة رسالة للشات
-    // ==========================================
+    /*
+    ==================================================
+    ADD MESSAGE
+    ==================================================
+    */
 
     function addMessage(text, type) {
 
         const message =
             document.createElement("div");
 
-
         message.className =
-            `message ${type}`;
-
+            "message " + type;
 
         message.textContent =
             text;
 
-
-        messages.appendChild(
-            message
-        );
-
+        messages.appendChild(message);
 
         messages.scrollTop =
             messages.scrollHeight;
-
 
         return message;
     }
 
 
-
-    // ==========================================
-    // الاتصال بريمو
-    // ==========================================
+    /*
+    ==================================================
+    ASK REMO
+    ==================================================
+    */
 
     async function askRemo(userMessage) {
 
@@ -540,7 +494,7 @@
                             "application/json",
 
                         "Authorization":
-                            `Bearer ${API_KEY}`
+                            "Bearer " + API_KEY
 
                     },
 
@@ -554,15 +508,21 @@
                                 role: "system",
 
                                 content:
-                                    `أنت ريمو.
+                                    `
+أنت ريمو.
 
-تحدث باللغة العربية.
+تحدث دائمًا باللغة العربية.
 
-افهم اللهجة المصرية.
+إذا تحدث المستخدم باللهجة المصرية،
+تحدث معه باللهجة المصرية.
 
-كن ذكيًا ومباشرًا ومفيدًا.
+كن ذكيًا ومفيدًا ومباشرًا.
 
-إذا كان المستخدم يتحدث بالمصري، رد عليه بالمصري بشكل طبيعي.`
+لا تخترع المعلومات.
+
+إذا لم تكن متأكدًا من معلومة تقنية،
+وضح أنك غير متأكد.
+`
                             },
 
                             {
@@ -581,25 +541,31 @@
             );
 
 
-        // ======================================
-        // لو حصل Error من السيرفر
-        // ======================================
+        /*
+        ==============================================
+        CHECK RESPONSE
+        ==============================================
+        */
 
         if (!response.ok) {
 
             const errorText =
                 await response.text();
 
-
             throw new Error(
-                `HTTP ${response.status}: ${errorText}`
+                "HTTP " +
+                response.status +
+                " - " +
+                errorText
             );
         }
 
 
-        // ======================================
-        // قراءة JSON
-        // ======================================
+        /*
+        ==============================================
+        JSON
+        ==============================================
+        */
 
         const data =
             await response.json();
@@ -611,24 +577,25 @@
         );
 
 
-        // ======================================
-        // استخراج الرد
-        // ======================================
+        /*
+        ==============================================
+        GET ANSWER
+        ==============================================
+        */
 
         const answer =
             data
-                ?.choices
-                ?.at(0)
-                ?.message
-                ?.content;
+            ?.choices
+            ?.at(0)
+            ?.message
+            ?.content;
 
 
         if (!answer) {
 
             throw new Error(
-                "لم يصل رد صحيح من ريمو"
+                "لم يصل رد صحيح من REMO"
             );
-
         }
 
 
@@ -636,10 +603,11 @@
     }
 
 
-
-    // ==========================================
-    // إرسال الرسالة
-    // ==========================================
+    /*
+    ==================================================
+    SEND MESSAGE
+    ==================================================
+    */
 
     async function sendMessage() {
 
@@ -647,14 +615,18 @@
             input.value.trim();
 
 
-        // منع إرسال رسالة فاضية
+        /*
+        منع الرسالة الفارغة
+        */
 
         if (!text) {
             return;
         }
 
 
-        // عرض رسالة المستخدم
+        /*
+        عرض رسالة المستخدم
+        */
 
         addMessage(
             text,
@@ -662,28 +634,35 @@
         );
 
 
-        // تفريغ الـInput
+        /*
+        تفريغ Input
+        */
 
         input.value = "";
 
 
-        // تعطيل الزر أثناء التفكير
+        /*
+        تعطيل الإرسال
+        */
 
         sendBtn.disabled =
             true;
 
 
-        // تغيير الحالة
+        /*
+        حالة ريمو
+        */
 
         status.textContent =
             "● ريمو بيفكر...";
-
 
         status.style.color =
             "#f59e0b";
 
 
-        // رسالة مؤقتة
+        /*
+        رسالة مؤقتة
+        */
 
         const typing =
             addMessage(
@@ -694,18 +673,24 @@
 
         try {
 
-            // الاتصال بـRemo
+            /*
+            إرسال إلى API
+            */
 
             const answer =
                 await askRemo(text);
 
 
-            // حذف رسالة التفكير
+            /*
+            إزالة Thinking
+            */
 
             typing.remove();
 
 
-            // عرض إجابة ريمو
+            /*
+            عرض رد ريمو
+            */
 
             addMessage(
                 answer,
@@ -713,17 +698,18 @@
             );
 
 
-            // الحالة
+            /*
+            Connected
+            */
 
             status.textContent =
                 "● متصل";
 
-
             status.style.color =
                 "#22c55e";
 
-
         }
+
 
         catch (error) {
 
@@ -736,9 +722,13 @@
             typing.remove();
 
 
+            /*
+            عرض الخطأ للمستخدم
+            */
+
             addMessage(
-                "مش قادر أوصل لريمو دلوقتي 😕\n\n" +
-                "تأكد إن Ollama وLiteLLM شغالين على Port 4000.",
+                "حصل خطأ وأنا بحاول أوصل لريمو.\n\n" +
+                "تأكد إن LiteLLM وCloudflare Tunnel شغالين.",
                 "remo"
             );
 
@@ -746,30 +736,34 @@
             status.textContent =
                 "● خطأ في الاتصال";
 
-
             status.style.color =
                 "#ef4444";
 
         }
 
 
-        // إعادة تفعيل الزر
+        /*
+        إعادة تفعيل الزر
+        */
 
         sendBtn.disabled =
             false;
 
 
-        // إعادة التركيز للـInput
+        /*
+        التركيز على Input
+        */
 
         input.focus();
 
     }
 
 
-
-    // ==========================================
-    // زر الإرسال
-    // ==========================================
+    /*
+    ==================================================
+    SEND BUTTON
+    ==================================================
+    */
 
     sendBtn.addEventListener(
         "click",
@@ -777,10 +771,11 @@
     );
 
 
-
-    // ==========================================
-    // Enter للإرسال
-    // ==========================================
+    /*
+    ==================================================
+    ENTER
+    ==================================================
+    */
 
     input.addEventListener(
         "keydown",
@@ -800,15 +795,15 @@
     );
 
 
-    // ==========================================
-    // التركيز على الـInput عند فتح الصفحة
-    // ==========================================
+    /*
+    ==================================================
+    FOCUS
+    ==================================================
+    */
 
     input.focus();
 
-
 </script>
-
 
 </body>
 
