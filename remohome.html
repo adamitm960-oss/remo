@@ -1,1789 +1,1007 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
+<html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiteLLM AI Workspace</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        darkbg: '#0b0f17',
+                        cardbg: '#111827',
+                        sidebarbg: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
 
-    <title>REMO AI</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Marked.js for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js for Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
     <style>
-
-        * {
-            box-sizing: border-box;
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-
-            font-family:
-                Tahoma,
-                Arial,
-                sans-serif;
-
-            color: #fff;
-
-            background:
-                radial-gradient(
-                    circle at top right,
-                    #312e81,
-                    transparent 35%
-                ),
-                radial-gradient(
-                    circle at bottom left,
-                    #164e63,
-                    transparent 35%
-                ),
-                #020617;
-        }
-
-
-        /* =========================
-           LOGIN
-        ========================= */
-
-        #loginPage {
-            min-height: 100vh;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            padding: 20px;
-        }
-
-
-        .login {
-            width: 100%;
-            max-width: 420px;
-
-            padding: 35px;
-
-            border-radius: 25px;
-
-            background:
-                rgba(255, 255, 255, .07);
-
-            border:
-                1px solid
-                rgba(255, 255, 255, .12);
-
-            backdrop-filter:
-                blur(20px);
-
-            box-shadow:
-                0 30px 80px
-                rgba(0, 0, 0, .5);
-        }
-
-
-        .logo {
-            text-align: center;
-
-            font-size: 50px;
-
-            font-weight: 900;
-
-            letter-spacing: 4px;
-        }
-
-
-        .logo span {
-            color: #818cf8;
-        }
-
-
-        .subtitle {
-            text-align: center;
-
-            color: #94a3b8;
-
-            margin-bottom: 30px;
-        }
-
-
-        input,
-        textarea {
-            width: 100%;
-
-            border: none;
-            outline: none;
-
-            color: #fff;
-
-            background:
-                rgba(0, 0, 0, .3);
-
-            border:
-                1px solid
-                rgba(255, 255, 255, .1);
-
-            border-radius: 14px;
-
-            padding: 15px;
-
-            font-size: 15px;
-        }
-
-
-        button {
-            border: none;
-
-            cursor: pointer;
-
-            color: #fff;
-
-            background: #6366f1;
-
-            padding: 13px 20px;
-
-            border-radius: 13px;
-
-            font-weight: bold;
-
-            transition: .2s;
-        }
-
-
-        button:hover {
-            transform:
-                translateY(-2px);
-
-            filter:
-                brightness(1.1);
-        }
-
-
-        button:disabled {
-            opacity: .45;
-
-            cursor: not-allowed;
-
-            transform: none;
-
-            filter: none;
-        }
-
-
-        .login button {
-            width: 100%;
-
-            margin-top: 15px;
-        }
-
-
-        /* =========================
-           APP
-        ========================= */
-
-        #app {
-            display: none;
-        }
-
-
-        /* =========================
-           TOP BAR
-        ========================= */
-
-        .topBar {
-            position: sticky;
-
-            top: 0;
-
-            z-index: 100;
-
-            height: 70px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding: 0 25px;
-
-            background:
-                rgba(2, 6, 23, .92);
-
-            border-bottom:
-                1px solid
-                rgba(255, 255, 255, .08);
-
-            backdrop-filter:
-                blur(15px);
-        }
-
-
-        .brand {
-            font-size: 25px;
-
-            font-weight: 900;
-        }
-
-
-        .userInfo {
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-        }
-
-
-        .userInfo button {
-            background: #ef4444;
-
-            padding:
-                9px 15px;
-        }
-
-
-        /* =========================
-           QUOTA
-        ========================= */
-
-        .quotaContainer {
-            position: fixed;
-
-            top: 70px;
-
-            left: 0;
-            right: 0;
-
-            z-index: 90;
-
-            height: 48px;
-
-            padding:
-                7px 15px;
-
-            background:
-                rgba(15, 23, 42, .96);
-
-            border-bottom:
-                1px solid
-                rgba(255, 255, 255, .08);
-        }
-
-
-        .quotaInfo {
-            max-width: 1200px;
-
-            margin: auto;
-
-            height: 100%;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 15px;
-        }
-
-
-        .quotaText {
-            min-width: 180px;
-
-            font-size: 13px;
-
-            font-weight: bold;
-        }
-
-
-        .quotaUnlimited {
-            color: #4ade80;
-        }
-
-
-        .progress {
-            flex: 1;
-
-            height: 9px;
-
-            overflow: hidden;
-
-            border-radius: 20px;
-
-            background:
-                rgba(255, 255, 255, .1);
-        }
-
-
-        .progressBar {
-            height: 100%;
-
-            width: 100%;
-
-            border-radius: 20px;
-
-            background: #6366f1;
-
-            transition:
-                width .3s ease;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .container {
-            width: 100%;
-
-            max-width: 1200px;
-
-            margin: auto;
-
-            padding:
-                145px 20px 30px;
-        }
-
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .cards {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(200px, 1fr)
-                );
-
-            gap: 18px;
-
-            margin-bottom: 20px;
-        }
-
-
-        .card {
-            padding: 22px;
-
-            border-radius: 20px;
-
-            background:
-                rgba(255, 255, 255, .06);
-
-            border:
-                1px solid
-                rgba(255, 255, 255, .08);
-        }
-
-
-        .card small {
-            color: #94a3b8;
-        }
-
-
-        .card strong {
-            display: block;
-
-            font-size: 28px;
-
-            margin-top: 8px;
-        }
-
-
-        /* =========================
-           CHAT
-        ========================= */
-
-        .chat {
-            border-radius: 22px;
-
-            background:
-                rgba(255, 255, 255, .06);
-
-            border:
-                1px solid
-                rgba(255, 255, 255, .08);
-
-            padding: 20px;
-        }
-
-
-        .messages {
-            height: 430px;
-
-            overflow-y: auto;
-
-            padding: 10px;
-        }
-
-
-        .message {
-            max-width: 80%;
-
-            padding:
-                13px 16px;
-
-            margin:
-                12px 0;
-
-            border-radius: 16px;
-
-            line-height: 1.8;
-
-            white-space: pre-wrap;
-        }
-
-
-        .message.user {
-            margin-right: auto;
-
-            background:
-                rgba(99, 102, 241, .25);
-        }
-
-
-        .message.ai {
-            margin-left: auto;
-
-            background:
-                rgba(255, 255, 255, .08);
-        }
-
-
-        .chatInput {
-            display: flex;
-
-            gap: 10px;
-
-            margin-top: 15px;
-        }
-
-
-        .chatInput textarea {
-            height: 60px;
-
-            resize: none;
-        }
-
-
-        .chatInput button {
-            min-width: 100px;
-        }
-
-
-        /* =========================
-           API
-        ========================= */
-
-        .api {
-            margin-top: 20px;
-
-            padding: 20px;
-
-            border-radius: 20px;
-
-            background:
-                rgba(255, 255, 255, .06);
-
-            border:
-                1px solid
-                rgba(255, 255, 255, .08);
-        }
-
-
-        .key {
+        .prose pre {
+            background-color: #1e293b !important;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            position: relative;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
             direction: ltr;
-
             text-align: left;
-
-            margin-top: 15px;
-
-            padding: 15px;
-
-            border-radius: 12px;
-
-            background: #020617;
-
+        }
+        .prose code {
             font-family: monospace;
-
-            word-break: break-all;
+            color: #38bdf8;
+        }
+        .prose p {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+        .prose ul {
+            list-style-type: disc;/
+            padding-right: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose ol {
+            list-style-type: decimal;
+            padding-right: 1.5rem;
+            margin-bottom: 0.75rem;
         }
 
-
-        pre {
-            direction: ltr;
-
-            text-align: left;
-
-            background: #020617;
-
-            padding: 15px;
-
-            border-radius: 12px;
-
-            overflow-x: auto;
-
-            white-space: pre-wrap;
+        .typing-cursor::after {
+            content: '▋';
+            display: inline-block;
+            animation: blink 1s infinite;
+            margin-right: 2px;
+            color: #38bdf8;
         }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 700px) {
-
-            .topBar {
-                padding: 0 12px;
-            }
-
-            .userInfo {
-                font-size: 12px;
-            }
-
-            .quotaInfo {
-                gap: 8px;
-            }
-
-            .quotaText {
-                min-width: 130px;
-
-                font-size: 11px;
-            }
-
-            .container {
-                padding-top: 135px;
-            }
-
-            .chatInput {
-                flex-direction: column;
-            }
-
-            .chatInput button {
-                width: 100%;
-            }
-
-            .message {
-                max-width: 95%;
-            }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
-
     </style>
 </head>
+<body class="bg-darkbg text-slate-100 font-sans antialiased h-screen flex overflow-hidden">
 
-
-<body>
-
-
-<!-- =====================================================
-     LOGIN
-===================================================== -->
-
-<div id="loginPage">
-
-    <div class="login">
-
-        <div class="logo">
-            REM<span>O</span>
-        </div>
-
-        <div class="subtitle">
-            AI Assistant
-        </div>
-
-        <input
-            id="username"
-            type="text"
-            placeholder="اكتب اسمك"
-            autocomplete="off"
-        >
-
-        <button onclick="login()">
-            دخول إلى REMO
-        </button>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     APP
-===================================================== -->
-
-<div id="app">
-
-
-    <!-- TOP BAR -->
-
-    <header class="topBar">
-
-        <div class="brand">
-            REMO
-        </div>
-
-
-        <div class="userInfo">
-
-            <span>
-                أهلاً
-                <b id="currentUser"></b>
-            </span>
-
-            <span id="currentRole"></span>
-
-            <button onclick="logout()">
-                خروج
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-72 bg-sidebarbg border-l border-slate-800 flex flex-col flex-shrink-0 transition-all duration-300 z-30 absolute md:relative h-full -right-72 md:right-0">
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-sky-600 flex items-center justify-center font-bold text-white shadow-lg shadow-sky-500/20">
+                    <i class="fa-solid fa-robot text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm text-slate-100">LiteLLM Studio</h1>
+                    <p class="text-xs text-slate-400">واجهة الذكاء الاصطناعي</p>
+                </div>
+            </div>
+            <button id="closeSidebarMobile" class="md:hidden text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-
         </div>
 
-    </header>
-
-
-
-    <!-- QUOTA -->
-
-    <div class="quotaContainer">
-
-        <div class="quotaInfo">
-
-            <div
-                id="quotaText"
-                class="quotaText"
-            >
-                متبقي 700 من 700 رسالة
-            </div>
-
-
-            <div
-                id="progressContainer"
-                class="progress"
-            >
-
-                <div
-                    id="progressBar"
-                    class="progressBar"
-                ></div>
-
-            </div>
-
+        <!-- New Chat Button -->
+        <div class="p-3">
+            <button id="newChatBtn" class="w-full bg-sky-600 hover:bg-sky-500 text-white rounded-xl py-2.5 px-4 flex items-center justify-center gap-2 font-medium transition shadow-sm hover:shadow-sky-500/20 active:scale-[0.98]">
+                <i class="fa-solid fa-plus text-sm"></i>
+                <span>محادثة جديدة</span>
+            </button>
         </div>
 
-    </div>
-
-
-
-    <!-- MAIN -->
-
-    <div class="container">
-
-
-        <!-- STATS -->
-
-        <div class="cards">
-
-
-            <div class="card">
-
-                <small>
-                    المستخدم
-                </small>
-
-                <strong id="statUser">
-                    -
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <small>
-                    النوع
-                </small>
-
-                <strong id="statRole">
-                    -
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <small>
-                    الرسائل المستخدمة
-                </small>
-
-                <strong id="statRequests">
-                    0
-                </strong>
-
-            </div>
-
-
-            <div class="card">
-
-                <small>
-                    الرسائل المتبقية
-                </small>
-
-                <strong id="statRemaining">
-                    700
-                </strong>
-
-            </div>
-
+        <!-- History List -->
+        <div class="flex-1 overflow-y-auto px-3 py-2 space-y-1" id="historyList">
+            <!-- Dynamic History Items -->
         </div>
 
+        <!-- Sidebar Footer -->
+        <div class="p-3 border-t border-slate-800 space-y-2">
+            <button id="openSettingsBtn" class="w-full text-slate-300 hover:bg-slate-800/80 rounded-lg p-2.5 flex items-center gap-3 text-sm transition">
+                <i class="fa-solid fa-gear text-slate-400 w-5"></i>
+                <span>الإعدادات والاتصال</span>
+            </button>
+            <button id="clearHistoryBtn" class="w-full text-rose-400 hover:bg-rose-500/10 rounded-lg p-2.5 flex items-center gap-3 text-sm transition">
+                <i class="fa-solid fa-trash-can w-5"></i>
+                <span>مسح كل المحادثات</span>
+            </button>
+        </div>
+    </aside>
 
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"></div>
 
-        <!-- CHAT -->
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full min-w-0 bg-darkbg relative">
+        
+        <!-- Header Bar -->
+        <header class="h-16 border-b border-slate-800 bg-cardbg/80 backdrop-blur px-4 flex items-center justify-between z-10">
+            <div class="flex items-center gap-3">
+                <button id="openSidebarMobile" class="md:hidden text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                
+                <!-- Server Connection Status -->
+        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700/60">
+            <span id="statusPing" class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+            <span id="statusText" class="text-xs font-medium text-slate-300">جاري الاتصال...</span>
+            <button id="testConnBtn" onclick="diagnoseConnection()" class="text-[10px] bg-slate-700 hover:bg-slate-600 text-slate-200 px-2 py-0.5 rounded transition mr-1">
+                <i class="fa-solid fa-stethoscope ml-1"></i>فحص
+            </button>
+        </div>
+            </div>
 
-        <div class="chat">
+            <!-- Model Selector Dropdown -->
+            <div class="flex items-center gap-2">
+                <label for="modelSelect" class="text-xs text-slate-400 hidden sm:inline"><i class="fa-solid fa-microchip ml-1"></i>الموديل:</label>
+                <select id="modelSelect" class="bg-slate-800 text-slate-200 text-xs sm:text-sm rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-sky-500 transition max-w-[180px] sm:max-w-[240px]">
+                    <option value="remo">remo (افتراضي)</option>
+                    <option value="llama3">llama3</option>
+                </select>
+                <button id="refreshModelsBtn" title="تحديث قائمة الموديلات" class="p-2 text-slate-400 hover:text-sky-400 rounded-lg transition">
+                    <i class="fa-solid fa-arrows-rotate text-sm"></i>
+                </button>
+            </div>
+        </header>
 
-            <h2>
-                🤖 تحدث مع ريمو
-            </h2>
+        <!-- Messages Container -->
+        <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-4xl mx-auto w-full">
+            <!-- Dynamic Messages rendered here -->
+            
+            <!-- Welcome View (Default state) -->
+            <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center p-6 space-y-6">
+                <div class="w-16 h-16 rounded-2xl bg-sky-600/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-3xl shadow-xl">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="max-w-md space-y-2">
+                    <h2 class="text-2xl font-bold text-white">مرحباً بك في LiteLLM Workspace</h2>
+                    <p class="text-slate-400 text-sm">واجهتك الذكية المتصلة مباشرة بـ Ollama / LiteLLM Backend الخاصة بك. ابدأ كتابة رسالة أدناه لبدء المحادثة.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg pt-4 text-right">
+                    <button class="quick-prompt p-3 rounded-xl bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800 hover:border-sky-500/50 text-xs text-slate-300 transition text-right">
+                        <span class="font-bold text-sky-400 block mb-1">💻 برمجة</span>
+                        اكتب كود Python لإنشاء سيرفر FastAPI بسيط
+                    </button>
+                    <button class="quick-prompt p-3 rounded-xl bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800 hover:border-sky-500/50 text-xs text-slate-300 transition text-right">
+                        <span class="font-bold text-sky-400 block mb-1">💡 تلخيص ومساعدة</span>
+                        ما هي أفضل الممارسات لتحسين أداء برامج الذكاء الاصطناعي؟
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        <!-- Input Box Section -->
+        <div class="p-3 sm:p-4 border-t border-slate-800 bg-cardbg/50 backdrop-blur">
+            <div class="max-w-4xl mx-auto relative">
+                <form id="chatForm" class="flex items-end gap-2 bg-slate-800/90 border border-slate-700 focus-within:border-sky-500 rounded-2xl p-2 transition shadow-lg">
+                    <textarea 
+                        id="userPrompt" 
+                        rows="1" 
+                        placeholder="اكتب رسالتك هنا... (Shift + Enter لسطر جديد)"
+                        class="w-full bg-transparent text-slate-100 placeholder-slate-400 text-sm px-3 py-2 resize-none focus:outline-none max-h-36 overflow-y-auto"
+                    ></textarea>
+                    
+                    <button 
+                        type="submit" 
+                        id="sendBtn"
+                        class="bg-sky-600 hover:bg-sky-500 disabled:bg-slate-700 text-white w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition active:scale-95 shadow-md shadow-sky-500/20"
+                    >
+                        <i class="fa-solid fa-paper-plane text-sm"></i>
+                    </button>
+                    <button 
+                        type="button" 
+                        id="stopBtn"
+                        class="hidden bg-rose-600 hover:bg-rose-500 text-white w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition active:scale-95 shadow-md shadow-rose-500/20"
+                        title="إيقاف التوليد"
+                    >
+                        <i class="fa-solid fa-stop text-sm"></i>
+                    </button>
+                </form>
+                <div class="flex justify-between items-center px-2 mt-2 text-[11px] text-slate-500">
+                    <span>متصل بـ: <code id="displayBackendUrl" class="text-slate-400">trycloudflare.com</code></span>
+                    <span>LiteLLM OpenAI Compatible API</span>
+                </div>
+            </div>
+        </div>
+    </main>
 
-            <div
-                id="messages"
-                class="messages"
-            >
-
-                <div class="message ai">
-                    أهلاً 👋
-
-                    أنا ريمو.
-
-                    اكتب رسالتك للبدء.
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-cardbg border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-sky-400"></i>
+                    إعدادات الاتصال والنموذج
+                </h3>
+                <button id="closeSettingsBtn" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 space-y-4 text-sm">
+                <!-- Backend URL -->
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">رابط الباك إند (Backend URL)</label>
+                    <div class="flex gap-2">
+                        <input 
+                            type="url" 
+                            id="backendUrlInput" 
+                            value="https://possibility-quad-yacht-alone.trycloudflare.com"
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-sky-500 text-xs font-mono"
+                            placeholder="https://your-domain.trycloudflare.com"
+                        >
+                        <a id="openBackendDirectBtn" href="https://possibility-quad-yacht-alone.trycloudflare.com" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white px-3 py-2 rounded-lg text-xs flex items-center gap-1 font-medium transition" title="فتح الرابط في تبويب جديد لتخطي تحذير Cloudflare">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <span>فتح</span>
+                        </a>
+                    </div>
+                    <p class="text-[11px] text-amber-400 mt-1"><i class="fa-solid fa-triangle-exclamation ml-1"></i>إذا ظهر خطأ، اضغط "فتح" واقبل صفحة Cloudflare أولاً ثم أعد التجربة.</p>
                 </div>
 
+                <!-- API Key -->
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">مفتاح API (اخيلاري)</label>
+                    <input 
+                        type="password" 
+                        id="apiKeyInput" 
+                        placeholder="sk-..."
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-sky-500 text-xs font-mono"
+                    >
+                </div>
+
+                <!-- System Prompt -->
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">التعليمات الأساسية (System Prompt)</label>
+                    <textarea 
+                        id="systemPromptInput" 
+                        rows="2"
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-sky-500 text-xs resize-none"
+                        placeholder="انت مساعد ذكي ومفيد يجيب باللغة العربية بكفاءة."
+                    >انت مساعد ذكي ومفيد يجيب باللغة العربية بكفاءة عالية وبأسلوب منظم.</textarea>
+                </div>
+
+                <!-- Temperature Slider -->
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-slate-300">درجة الإبداع (Temperature):</span>
+                        <span id="tempValue" class="text-sky-400 font-bold">0.7</span>
+                    </div>
+                    <input type="range" id="tempInput" min="0" max="1" step="0.1" value="0.7" class="w-full accent-sky-500 bg-slate-800">
+                </div>
+
+                <!-- Stream Toggle -->
+                <div class="flex items-center justify-between py-1">
+                    <span class="text-slate-300">تفعيل البث المباشر (Stream Response)</span>
+                    <input type="checkbox" id="streamToggle" checked class="w-4 h-4 accent-sky-500 rounded cursor-pointer">
+                </div>
             </div>
 
-
-            <div class="chatInput">
-
-                <textarea
-                    id="messageInput"
-                    placeholder="اكتب رسالتك..."
-                ></textarea>
-
-
-                <button
-                    id="sendButton"
-                    onclick="sendMessage()"
-                >
-                    إرسال
+            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end gap-2">
+                <button id="saveSettingsBtn" class="bg-sky-600 hover:bg-sky-500 text-white rounded-lg px-4 py-2 font-medium text-xs transition">
+                    حفظ التغييرات
                 </button>
-
             </div>
-
         </div>
-
-
-
-        <!-- API -->
-
-        <div class="api">
-
-            <h2>
-                🔑 REMO API
-            </h2>
-
-            <p>
-                إنشاء API Key تجريبي.
-            </p>
-
-
-            <button onclick="generateAPIKey()">
-                إنشاء API Key
-            </button>
-
-
-            <div
-                id="apiKeyBox"
-                class="key"
-                style="display:none"
-            ></div>
-
-
-            <h3>
-                مثال الاستخدام
-            </h3>
-
-
-            <pre id="apiExample">اضغط "إنشاء API Key" للحصول على مثال الاستخدام.</pre>
-
-        </div>
-
     </div>
 
-</div>
-
-
-
-<script>
-
-/*
-===========================================================
- REMO CONFIG
-===========================================================
-*/
-
-const LITELLM_URL =
-    "https://sheet-corrections-famous-bar.trycloudflare.com                                    ";
-
-
-/*
-===========================================================
- SETTINGS
-===========================================================
-*/
-
-const USER_LIMIT = 700;
-
-
-/*
-===========================================================
- STATE
-===========================================================
-*/
-
-let user = null;
-
-let messages = [];
-
-let usedMessages = 0;
-
-let apiKey = null;
-
-
-/*
-===========================================================
- LOGIN
-===========================================================
-*/
-
-function login() {
-
-    const input =
-        document.getElementById("username");
-
-
-    const name =
-        input.value.trim();
-
-
-    if (!name) {
-
-        alert("اكتب اسمك أولاً");
-
-        return;
-    }
-
-
-    /*
-    -----------------------------------------
-    Adam = Admin
-    -----------------------------------------
-    */
-
-    const isAdmin =
-        name.toLowerCase() === "adam";
-
-
-    user = {
-
-        username: name,
-
-        role:
-            isAdmin
-                ? "admin"
-                : "user"
-    };
-
-
-    /*
-    -----------------------------------------
-    Load usage
-    -----------------------------------------
-    */
-
-    const savedUsage =
-        localStorage.getItem(
-            "remo_usage_" +
-            name.toLowerCase()
-        );
-
-
-    usedMessages =
-        savedUsage
-            ? parseInt(savedUsage, 10)
-            : 0;
-
-
-    /*
-    -----------------------------------------
-    Save current user
-    -----------------------------------------
-    */
-
-    localStorage.setItem(
-        "remo_user",
-        JSON.stringify(user)
-    );
-
-
-    showApp();
-}
-
-
-/*
-===========================================================
- SHOW APP
-===========================================================
-*/
-
-function showApp() {
-
-    document
-        .getElementById("loginPage")
-        .style.display = "none";
-
-
-    document
-        .getElementById("app")
-        .style.display = "block";
-
-
-    document
-        .getElementById("currentUser")
-        .textContent =
-            user.username;
-
-
-    document
-        .getElementById("currentRole")
-        .textContent =
-            user.role === "admin"
-                ? "👑 Admin"
-                : "👤 User";
-
-
-    document
-        .getElementById("statUser")
-        .textContent =
-            user.username;
-
-
-    document
-        .getElementById("statRole")
-        .textContent =
-            user.role === "admin"
-                ? "Admin"
-                : "User";
-
-
-    updateQuota();
-}
-
-
-/*
-===========================================================
- UPDATE QUOTA
-===========================================================
-*/
-
-function updateQuota() {
-
-    const quotaText =
-        document.getElementById(
-            "quotaText"
-        );
-
-
-    const progressBar =
-        document.getElementById(
-            "progressBar"
-        );
-
-
-    const statRequests =
-        document.getElementById(
-            "statRequests"
-        );
-
-
-    const statRemaining =
-        document.getElementById(
-            "statRemaining"
-        );
-
-
-    const sendButton =
-        document.getElementById(
-            "sendButton"
-        );
-
-
-    const messageInput =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    /*
-    ==========================================
-    ADMIN
-    ==========================================
-    */
-
-    if (
-        user &&
-        user.role === "admin"
-    ) {
-
-        quotaText.textContent =
-            "∞ لا نهائية — Admin";
-
-
-        quotaText.className =
-            "quotaText quotaUnlimited";
-
-
-        progressBar.style.width =
-            "100%";
-
-
-        progressBar.style.background =
-            "#4ade80";
-
-
-        statRequests.textContent =
-            usedMessages;
-
-
-        statRemaining.textContent =
-            "∞";
-
-
-        sendButton.disabled =
-            false;
-
-
-        messageInput.disabled =
-            false;
-
-
-        messageInput.placeholder =
-            "اكتب رسالتك إلى ريمو...";
-
-
-        return;
-    }
-
-
-    /*
-    ==========================================
-    USER
-    ==========================================
-    */
-
-    const remaining =
-        Math.max(
-            0,
-            USER_LIMIT -
-            usedMessages
-        );
-
-
-    const percentage =
-        (
-            remaining /
-            USER_LIMIT
-        ) * 100;
-
-
-    quotaText.textContent =
-        `متبقي ${remaining} من ${USER_LIMIT} رسالة`;
-
-
-    quotaText.className =
-        "quotaText";
-
-
-    progressBar.style.width =
-        percentage + "%";
-
-
-    progressBar.style.background =
-        remaining <= 50
-            ? "#ef4444"
-            : "#6366f1";
-
-
-    statRequests.textContent =
-        usedMessages;
-
-
-    statRemaining.textContent =
-        remaining;
-
-
-    /*
-    ------------------------------------------
-    Limit reached
-    ------------------------------------------
-    */
-
-    if (remaining <= 0) {
-
-        sendButton.disabled =
-            true;
-
-
-        messageInput.disabled =
-            true;
-
-
-        messageInput.placeholder =
-            "🚫 انتهت رسائلك الـ700";
-
-    } else {
-
-        sendButton.disabled =
-            false;
-
-
-        messageInput.disabled =
-            false;
-
-
-        messageInput.placeholder =
-            "اكتب رسالتك...";
-    }
-}
-
-
-/*
-===========================================================
- SAVE USAGE
-===========================================================
-*/
-
-function saveUsage() {
-
-    if (!user) {
-        return;
-    }
-
-
-    localStorage.setItem(
-
-        "remo_usage_" +
-        user.username.toLowerCase(),
-
-        String(usedMessages)
-    );
-}
-
-
-/*
-===========================================================
- ADD MESSAGE
-===========================================================
-*/
-
-function addMessage(
-    text,
-    type
-) {
-
-    const container =
-        document.getElementById(
-            "messages"
-        );
-
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.className =
-        "message " + type;
-
-
-    div.textContent =
-        text;
-
-
-    container.appendChild(div);
-
-
-    container.scrollTop =
-        container.scrollHeight;
-}
-
-
-/*
-===========================================================
- SEND MESSAGE
-===========================================================
-*/
-
-async function sendMessage() {
-
-    if (!user) {
-        return;
-    }
-
-
-    /*
-    -----------------------------------------
-    Check quota
-    -----------------------------------------
-    */
-
-    if (
-        user.role !== "admin" &&
-        usedMessages >= USER_LIMIT
-    ) {
-
-        alert(
-            "🚫 انتهت رسائلك الـ700."
-        );
-
-        updateQuota();
-
-        return;
-    }
-
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) {
-        return;
-    }
-
-
-    /*
-    -----------------------------------------
-    Add user message
-    -----------------------------------------
-    */
-
-    addMessage(
-        text,
-        "user"
-    );
-
-
-    input.value = "";
-
-
-    messages.push({
-
-        role: "user",
-
-        content: text
-
-    });
-
-
-    /*
-    -----------------------------------------
-    Count
-    -----------------------------------------
-    */
-
-    if (
-        user.role !== "admin"
-    ) {
-
-        usedMessages++;
-
-        saveUsage();
-
-        updateQuota();
-    }
-
-
-    /*
-    -----------------------------------------
-    Loading
-    -----------------------------------------
-    */
-
-    const loading =
-        document.createElement(
-            "div"
-        );
-
-
-    loading.className =
-        "message ai";
-
-
-    loading.id =
-        "loading";
-
-
-    loading.textContent =
-        "ريمو بيفكر...";
-
-
-    document
-        .getElementById("messages")
-        .appendChild(loading);
-
-
-    try {
-
-        /*
-        ======================================
-        LiteLLM
-        ======================================
-        */
-
-        const response =
-            await fetch(
-
-                LITELLM_URL +
-                "/v1/chat/completions",
-
-                {
-
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            model: "remo",
-
-                            messages:
-                                messages,
-
-                            temperature: 0.3
-
-                        })
-
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-slate-800 text-slate-200 px-4 py-2 rounded-xl border border-slate-700 text-xs shadow-xl hidden transition duration-300 z-50 flex items-center gap-2">
+        <i id="toastIcon" class="fa-solid fa-info-circle text-sky-400"></i>
+        <span id="toastMsg">تم التحديث بنجاح</span>
+    </div>
+
+    <script>
+        // Default Configuration & Application State
+        const CONFIG_KEY = 'litellm_app_config_v1';
+        const HISTORY_KEY = 'litellm_chat_history_v1';
+
+        let appState = {
+            backendUrl: 'https://possibility-quad-yacht-alone.trycloudflare.com',
+            apiKey: '',
+            systemPrompt: 'انت مساعد ذكي ومفيد يجيب باللغة العربية بكفاءة عالية وبأسلوب منظم.',
+            temperature: 0.7,
+            stream: true,
+            selectedModel: 'remo',
+            activeChatId: null,
+            chats: [],
+            isGenerating: false,
+            abortController: null
+        };
+
+        // DOM Element Cache
+        const elements = {
+            messagesContainer: document.getElementById('messagesContainer'),
+            welcomeScreen: document.getElementById('welcomeScreen'),
+            userPrompt: document.getElementById('userPrompt'),
+            chatForm: document.getElementById('chatForm'),
+            sendBtn: document.getElementById('sendBtn'),
+            stopBtn: document.getElementById('stopBtn'),
+            modelSelect: document.getElementById('modelSelect'),
+            refreshModelsBtn: document.getElementById('refreshModelsBtn'),
+            statusPing: document.getElementById('statusPing'),
+            statusText: document.getElementById('statusText'),
+            displayBackendUrl: document.getElementById('displayBackendUrl'),
+            historyList: document.getElementById('historyList'),
+            newChatBtn: document.getElementById('newChatBtn'),
+            clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+            
+            // Mobile Sidebar
+            sidebar: document.getElementById('sidebar'),
+            sidebarOverlay: document.getElementById('sidebarOverlay'),
+            openSidebarMobile: document.getElementById('openSidebarMobile'),
+            closeSidebarMobile: document.getElementById('closeSidebarMobile'),
+
+            // Settings Modal
+            settingsModal: document.getElementById('settingsModal'),
+            openSettingsBtn: document.getElementById('openSettingsBtn'),
+            closeSettingsBtn: document.getElementById('closeSettingsBtn'),
+            saveSettingsBtn: document.getElementById('saveSettingsBtn'),
+            backendUrlInput: document.getElementById('backendUrlInput'),
+            apiKeyInput: document.getElementById('apiKeyInput'),
+            systemPromptInput: document.getElementById('systemPromptInput'),
+            tempInput: document.getElementById('tempInput'),
+            tempValue: document.getElementById('tempValue'),
+            streamToggle: document.getElementById('streamToggle'),
+
+            // Toast
+            toast: document.getElementById('toast'),
+            toastMsg: document.getElementById('toastMsg')
+        };
+
+        // Load saved state on boot
+        function initApp() {
+            // Load saved settings
+            const savedConfig = localStorage.getItem(CONFIG_KEY);
+            if (savedConfig) {
+                try {
+                    const parsed = JSON.parse(savedConfig);
+                    appState = { ...appState, ...parsed };
+                } catch(e) { console.error('Error loading config:', e); }
+            }
+
+            // Load saved chat history
+            const savedChats = localStorage.getItem(HISTORY_KEY);
+            if (savedChats) {
+                try {
+                    appState.chats = JSON.parse(savedChats);
+                } catch(e) { console.error('Error loading history:', e); }
+            }
+
+            // Sync Settings Form UI
+            elements.backendUrlInput.value = appState.backendUrl;
+            elements.apiKeyInput.value = appState.apiKey || '';
+            elements.systemPromptInput.value = appState.systemPrompt;
+            elements.tempInput.value = appState.temperature;
+            elements.tempValue.textContent = appState.temperature;
+            elements.streamToggle.checked = appState.stream;
+            
+            updateUrlDisplay();
+            renderHistoryList();
+            
+            // Check Server & Load Models
+            checkBackendConnection();
+            
+            // Setup Event Listeners
+            setupEventListeners();
+        }
+
+        function updateUrlDisplay() {
+            try {
+                const url = new URL(appState.backendUrl);
+                elements.displayBackendUrl.textContent = url.hostname;
+            } catch {
+                elements.displayBackendUrl.textContent = appState.backendUrl;
+            }
+        }
+
+        function saveConfigToStorage() {
+            const dataToSave = {
+                backendUrl: appState.backendUrl,
+                apiKey: appState.apiKey,
+                systemPrompt: appState.systemPrompt,
+                temperature: appState.temperature,
+                stream: appState.stream,
+                selectedModel: appState.selectedModel
+            };
+            localStorage.setItem(CONFIG_KEY, JSON.stringify(dataToSave));
+        }
+
+        function saveChatsToStorage() {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(appState.chats));
+        }
+
+        // Test backend connectivity and fetch models list from /v1/models
+        async function checkBackendConnection() {
+            elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse';
+            elements.statusText.textContent = 'جاري التحقق...';
+
+            let cleanBaseUrl = appState.backendUrl.replace(/\/+$/, '');
+            const modelsEndpoint = `${cleanBaseUrl}/v1/models`;
+
+            const headers = {
+                'bypass-tunnel-reminder': 'true',
+                'ngrok-skip-browser-warning': 'true'
+            };
+            if (appState.apiKey) {
+                headers['Authorization'] = `Bearer ${appState.apiKey}`;
+            }
+
+            try {
+                const response = await fetch(modelsEndpoint, { method: 'GET', headers });
+                
+                const contentType = response.headers.get('content-type') || '';
+                if (contentType.includes('text/html')) {
+                    throw new Error('CLOUDFLARE_INTERSTITIAL');
                 }
-            );
 
-
-        const data =
-            await response.json();
-
-
-        /*
-        --------------------------------------
-        Remove loading
-        --------------------------------------
-        */
-
-        const loadingElement =
-            document.getElementById(
-                "loading"
-            );
-
-
-        if (loadingElement) {
-            loadingElement.remove();
+                if (response.ok) {
+                    const data = await response.json();
+                    elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+                    elements.statusText.textContent = 'متصل بـ LiteLLM';
+                    
+                    if (data && data.data && Array.isArray(data.data) && data.data.length > 0) {
+                        populateModelSelect(data.data.map(m => m.id));
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (err) {
+                console.warn('Could not fetch models automatically:', err);
+                elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-rose-500'; 
+                if (err.message === 'CLOUDFLARE_INTERSTITIAL') {
+                    elements.statusText.textContent = 'يتطلب قبول Cloudflare';
+                } else {
+                    elements.statusText.textContent = 'خطأ في الاتصال (CORS / Tunnel)';
+                }
+            }
         }
 
+        async function diagnoseConnection() {
+            let cleanBaseUrl = appState.backendUrl.replace(/\/+$/, '');
+            showToast('جاري فحص الاتصال بالباك إند...', false);
 
-        /*
-        --------------------------------------
-        Error
-        --------------------------------------
-        */
+            try {
+                const res = await fetch(`${cleanBaseUrl}/v1/models`, {
+                    headers: {
+                        'bypass-tunnel-reminder': 'true',
+                        'ngrok-skip-browser-warning': 'true',
+                        ...(appState.apiKey ? { 'Authorization': `Bearer ${appState.apiKey}` } : {})
+                    }
+                });
 
-        if (!response.ok) {
+                const text = await res.text();
+                if (text.includes('<!DOCTYPE html>') || text.includes('Cloudflare')) {
+                    alert('⚠️ خطأ Cloudflare Interstitial:\n\nرابط Cloudflare يحتاج لتأكيد من المتصفح أولاً.\nاضغط على زر "فتح" بجانب الرابط في الإعدادات، واضغط "Visit Site" أو "Continue"، ثم عد إلى هنا واضغط فحص.');
+                    return;
+                }
 
-            addMessage(
+                try {
+                    const json = JSON.parse(text);
+                    if (json.data) {
+                        alert(`✅ الاتصال ناجح 100%!\n\nالموديلات المتاحة:\n` + json.data.map(m => '• ' + m.id).join('\n'));
+                        populateModelSelect(json.data.map(m => m.id));
+                        elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+                        elements.statusText.textContent = 'متصل بـ LiteLLM';
+                    } else {
+                        alert('⚠️ السيرفر استجاب لكن لم يرجع قائمة موديلات بصيغة OpenAI standard.\nالاستجابة:\n' + text.substring(0, 300));
+                    }
+                } catch(e) {
+                    alert('⚠️ السيرفر استجاب بنص ليس JSON:\n' + text.substring(0, 300));
+                }
 
-                "❌ حصل خطأ من LiteLLM:\n\n" +
-                (
-                    data?.error?.message
-                    ||
-                    JSON.stringify(data)
-                ),
-
-                "ai"
-            );
-
-            return;
+            } catch(err) {
+                alert(`❌ فشل الاتصال برابط الباك إند (Failed to fetch):\n${err.message}\n\nالأسباب والتصحيح:\n1. تأكد من تفعيل CORS في LiteLLM بالمرور براميتر: --cors_origins "*"\n2. تأكد من أن الرابط ${cleanBaseUrl} يعمل ولم يقتصر/يتغير بسبب إعادة تشغيل Cloudflare Tunnel.`);
+            }
         }
 
-
-        /*
-        --------------------------------------
-        AI response
-        --------------------------------------
-        */
-
-        const answer =
-            data
-                ?.choices
-                ?.[0]
-                ?.message
-                ?.content;
-
-
-        if (!answer) {
-
-            addMessage(
-                "❌ ريمو لم يرجع ردًا صحيحًا.",
-                "ai"
-            );
-
-            console.log(data);
-
-            return;
+        function populateModelSelect(models) {
+            elements.modelSelect.innerHTML = '';
+            models.forEach(modelId => {
+                const opt = document.createElement('option');
+                opt.value = modelId;
+                opt.textContent = modelId;
+                if (modelId === appState.selectedModel) opt.selected = true;
+                elements.modelSelect.appendChild(opt);
+            });
+            if (models.length > 0 && !models.includes(appState.selectedModel)) {
+                appState.selectedModel = models[0];
+                saveConfigToStorage();
+            }
         }
 
-
-        addMessage(
-            answer,
-            "ai"
-        );
-
-
-        messages.push({
-
-            role: "assistant",
-
-            content: answer
-
-        });
-
-
-    } catch (error) {
-
-        const loadingElement =
-            document.getElementById(
-                "loading"
-            );
-
-
-        if (loadingElement) {
-            loadingElement.remove();
+        function showToast(message, isError = false) {
+            elements.toastMsg.textContent = message;
+            elements.toast.querySelector('i').className = isError 
+                ? 'fa-solid fa-triangle-exclamation text-rose-400' 
+                : 'fa-solid fa-circle-check text-emerald-400';
+            elements.toast.classList.remove('hidden');
+            setTimeout(() => {
+                elements.toast.classList.add('hidden');
+            }, 3000);
         }
 
+        function formatMarkdown(text) {
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (lang && hljs.getLanguage(lang)) {
+                            return hljs.highlight(code, { language: lang }).value;
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true
+                });
+                return marked.parse(text);
+            }
+            return text.replace(/\n/g, '<br>');
+        }
 
-        addMessage(
+        function renderMessages() {
+            elements.messagesContainer.innerHTML = '';
 
-            "❌ لا أستطيع الاتصال بـ LiteLLM.\n\n" +
-            "تأكد أن LiteLLM شغال على Port 4000 وأن Cloudflare Tunnel شغال.",
-
-            "ai"
-        );
-
-
-        console.error(error);
-    }
-}
-
-
-/*
-===========================================================
- ENTER TO SEND
-===========================================================
-*/
-
-document
-    .getElementById("messageInput")
-    .addEventListener(
-        "keydown",
-        function(event) {
-
-            if (
-                event.key === "Enter" &&
-                !event.shiftKey
-            ) {
-
-                event.preventDefault();
-
-                sendMessage();
+            const currentChat = appState.chats.find(c => c.id === appState.activeChatId);
+            if (!currentChat || currentChat.messages.length === 0) {
+                elements.welcomeScreen.classList.remove('hidden');
+                elements.messagesContainer.appendChild(elements.welcomeScreen);
+                return;
             }
 
+            elements.welcomeScreen.classList.add('hidden');
+
+            currentChat.messages.forEach(msg => {
+                appendMessageToUI(msg.role, msg.content, false);
+            });
+
+            scrollToBottom();
         }
-    );
 
+        function appendMessageToUI(role, content = '', isStreaming = false) {
+            elements.welcomeScreen.classList.add('hidden');
+            
+            const isUser = role === 'user';
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex gap-3 sm:gap-4 ${isUser ? 'justify-end' : 'justify-start'} animate-in fade-in duration-200`;
 
-/*
-===========================================================
- GENERATE API KEY
-===========================================================
-*/
+            const avatar = isUser
+                ? `<div class="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0"><i class="fa-solid fa-user"></i></div>`
+                : `<div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0"><i class="fa-solid fa-robot"></i></div>`;
 
-function generateAPIKey() {
+            const contentClass = isUser
+                ? 'bg-sky-600/90 text-white rounded-2xl rounded-tr-none px-4 py-3 text-sm max-w-[85%] sm:max-w-[75%] shadow-md'
+                : 'bg-cardbg border border-slate-800 text-slate-100 rounded-2xl rounded-tl-none px-4 py-3 text-sm max-w-[90%] sm:max-w-[85%] prose prose-invert shadow-md';
 
-    const random =
-        crypto
-            .randomUUID()
-            .replaceAll("-", "");
+            const copyBtnHtml = !isUser ? `
+                <div class="mt-2 pt-2 border-t border-slate-800/80 flex justify-end gap-2 text-xs text-slate-400">
+                    <button onclick="copyToClipboard(this)" class="hover:text-sky-400 transition flex items-center gap-1">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>نسخ</span>
+                    </button>
+                </div>
+            ` : '';
 
+            msgDiv.innerHTML = isUser ? `
+                <div class="${contentClass}">
+                    <div class="whitespace-pre-wrap">${escapeHtml(content)}</div>
+                </div>
+                ${avatar}
+            ` : `
+                ${avatar}
+                <div class="${contentClass}">
+                    <div class="message-content ${isStreaming ? 'typing-cursor' : ''}">${formatMarkdown(content)}</div>
+                    ${copyBtnHtml}
+                </div>
+            `;
 
-    apiKey =
-        "sk-remo-" +
-        random;
+            elements.messagesContainer.appendChild(msgDiv);
+            scrollToBottom();
 
+            // Highlight newly added code blocks
+            msgDiv.querySelectorAll('pre code').forEach((block) => {
+                if (window.hljs) hljs.highlightElement(block);
+            });
 
-    const box =
-        document.getElementById(
-            "apiKeyBox"
-        );
+            return msgDiv.querySelector('.message-content');
+        }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
-    box.style.display =
-        "block";
+        function scrollToBottom() {
+            elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
+        }
 
+        async function handleSendMessage(e) {
+            if (e) e.preventDefault();
 
-    box.textContent =
-        apiKey;
+            const prompt = elements.userPrompt.value.trim();
+            if (!prompt || appState.isGenerating) return;
 
-
-    document
-        .getElementById(
-            "apiExample"
-        )
-        .textContent =
-
-`fetch("${LITELLM_URL}/v1/chat/completions", {
-
-    method: "POST",
-
-    headers: {
-
-        "Content-Type":
-            "application/json",
-
-        "Authorization":
-            "Bearer ${apiKey}"
-
-    },
-
-    body: JSON.stringify({
-
-        model: "remo",
-
-        messages: [
-
-            {
-                role: "user",
-
-                content:
-                    "أهلاً يا ريمو"
+            // Ensure we have an active chat session
+            if (!appState.activeChatId) {
+                createNewChat();
             }
 
-        ]
+            const currentChat = appState.chats.find(c => c.id === appState.activeChatId);
+            if (!currentChat) return;
 
-    })
+            // Add user message to state
+            currentChat.messages.push({ role: 'user', content: prompt });
+            if (currentChat.title === 'محادثة جديدة') {
+                currentChat.title = prompt.substring(0, 30) + (prompt.length > 30 ? '...' : '');
+                renderHistoryList();
+            }
 
-});`;
-}
+            elements.userPrompt.value = '';
+            elements.userPrompt.style.height = 'auto';
 
+            // Render User Message
+            appendMessageToUI('user', prompt);
 
-/*
-===========================================================
- LOGOUT
-===========================================================
-*/
+            // Set state to generating
+            appState.isGenerating = true;
+            toggleGeneratingState(true);
 
-function logout() {
+            // Prepare API Request Payload
+            let cleanBaseUrl = appState.backendUrl.replace(/\/+$/, '');
+            const chatEndpoint = `${cleanBaseUrl}/v1/chat/completions`;
 
-    /*
-    -----------------------------------------
-    IMPORTANT:
-    لا نمسح عداد الرسائل.
-    -----------------------------------------
-    */
+            const requestMessages = [
+                { role: 'system', content: appState.systemPrompt },
+                ...currentChat.messages
+            ];
 
-    localStorage.removeItem(
-        "remo_user"
-    );
+            const payload = {
+                model: appState.selectedModel,
+                messages: requestMessages,
+                temperature: parseFloat(appState.temperature),
+                stream: appState.stream
+            };
 
+            const headers = {
+                'Content-Type': 'application/json',
+                'bypass-tunnel-reminder': 'true',
+                'ngrok-skip-browser-warning': 'true'
+            };
+            if (appState.apiKey) {
+                headers['Authorization'] = `Bearer ${appState.apiKey}`;
+            }
 
-    /*
-    -----------------------------------------
-    Reset current session
-    -----------------------------------------
-    */
+            appState.abortController = new AbortController();
 
-    user = null;
+            // AI Response Container
+            const responseElement = appendMessageToUI('assistant', '', true);
+            let fullAiResponse = '';
 
-    messages = [];
+            try {
+                if (appState.stream) {
+                    // Streaming Response
+                    const response = await fetch(chatEndpoint, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify(payload),
+                        signal: appState.abortController.signal
+                    });
 
-    usedMessages = 0;
+                    if (!response.ok) {
+                        const errData = await response.text();
+                        throw new Error(`خطأ من السيرفر (${response.status}): ${errData}`);
+                    }
 
-    apiKey = null;
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder('utf-8');
 
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
 
-    /*
-    -----------------------------------------
-    Hide app
-    -----------------------------------------
-    */
+                        const chunk = decoder.decode(value, { stream: true });
+                        const lines = chunk.split('\n').filter(line => line.trim() !== '');
 
-    document
-        .getElementById("app")
-        .style.display = "none";
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const dataStr = line.replace('data: ', '').trim();
+                                if (dataStr === '[DONE]') break;
 
+                                try {
+                                    const json = JSON.parse(dataStr);
+                                    const delta = json.choices[0]?.delta?.content || '';
+                                    fullAiResponse += delta;
+                                    responseElement.innerHTML = formatMarkdown(fullAiResponse);
+                                    scrollToBottom();
+                                } catch (e) {
+                                    // Skip unparseable JSON stream chunks
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // Non-streaming fetch
+                    const response = await fetch(chatEndpoint, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify(payload),
+                        signal: appState.abortController.signal
+                    });
 
-    /*
-    -----------------------------------------
-    Show login
-    -----------------------------------------
-    */
+                    if (!response.ok) {
+                        const errData = await response.text();
+                        throw new Error(`خطأ من السيرفر (${response.status}): ${errData}`);
+                    }
 
-    document
-        .getElementById("loginPage")
-        .style.display = "flex";
+                    const data = await response.json();
+                    fullAiResponse = data.choices[0]?.message?.content || 'لم يتم استلام نص متوافق.';
+                    responseElement.innerHTML = formatMarkdown(fullAiResponse);
+                }
 
+                // Finalize response
+                responseElement.classList.remove('typing-cursor');
+                currentChat.messages.push({ role: 'assistant', content: fullAiResponse });
+                saveChatsToStorage();
 
-    /*
-    -----------------------------------------
-    Clear login
-    -----------------------------------------
-    */
+            } catch (err) {
+                if (err.name === 'AbortError') {
+                    showToast('تم إيقاف التوليد بطلب منك.');
+                    responseElement.innerHTML += '<p class="text-rose-400 text-xs mt-2">[تم إلغاء التوليد]</p>';
+                } else {
+                    console.error('Chat error:', err);
+                    showToast('فشل الاتصال بالباك إند (Failed to Fetch)', true);
+                    
+                    let errorHelp = `<div class="p-3 bg-rose-950/40 border border-rose-500/30 rounded-xl space-y-2 text-rose-200 dir-rtl text-right">
+                        <p class="font-bold text-rose-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation"></i> تعذر الاتصال بالسيرفر (Failed to fetch)</p>
+                        <p class="text-xs text-slate-300">لحل هذه المشكلة، اتبع الخطوات التالية:</p>
+                        <ol class="list-decimal list-inside text-xs space-y-1 text-slate-300">
+                            <li><strong class="text-white">تشغيل LiteLLM بالصيغة الصحيحة:</strong> استخدم الأمر التالي في PowerShell:
+                                <code class="block my-1 p-1.5 bg-slate-900 rounded font-mono text-sky-300 text-[11px] select-all">litellm --model ollama/remo</code>
+                            </li>
+                            <li><strong class="text-white">تأكد من عمل الرابط:</strong> اضغط على <a href="${appState.backendUrl}" target="_blank" class="underline text-sky-400 font-bold">فتح رابط الباك إند</a> لتخطي صفحة تحذير Cloudflare إذا كانت تظهر.</li>
+                            <li><strong class="text-white">تجديد الرابط:</strong> إذا قمت بإعادة تشغيل Cloudflare Tunnel، انسخ الرابط الجديد من الترمينال وضعه في قائمة <strong>الإعدادات والاتصال</strong>.</li>
+                        </ol>
+                    </div>`;
+                    
+                    responseElement.innerHTML = errorHelp;
+                }
+            } finally {
+                responseElement.classList.remove('typing-cursor');
+                appState.isGenerating = false;
+                toggleGeneratingState(false);
+                saveChatsToStorage();
+            }
+        }
 
-    document
-        .getElementById("username")
-        .value = "";
+        function toggleGeneratingState(isGenerating) {
+            if (isGenerating) {
+                elements.sendBtn.classList.add('hidden');
+                elements.stopBtn.classList.remove('hidden');
+            } else {
+                elements.sendBtn.classList.remove('hidden');
+                elements.stopBtn.classList.add('hidden');
+            }
+        }
 
+        function stopGeneration() {
+            if (appState.abortController) {
+                appState.abortController.abort();
+            }
+        }
 
-    /*
-    -----------------------------------------
-    Reset chat
-    -----------------------------------------
-    */
+        function createNewChat() {
+            const newChat = {
+                id: 'chat_' + Date.now(),
+                title: 'محادثة جديدة',
+                timestamp: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+                messages: []
+            };
+            appState.chats.unshift(newChat);
+            appState.activeChatId = newChat.id;
+            saveChatsToStorage();
+            renderHistoryList();
+            renderMessages();
+        }
 
-    document
-        .getElementById("messages")
-        .innerHTML = `
+        function selectChat(chatId) {
+            appState.activeChatId = chatId;
+            renderHistoryList();
+            renderMessages();
+            // Close mobile sidebar
+            elements.sidebar.classList.add('-right-72');
+            elements.sidebar.classList.remove('right-0');
+            elements.sidebarOverlay.classList.add('hidden');
+        }
 
-            <div class="message ai">
+        function deleteChat(chatId, event) {
+            event.stopPropagation();
+            appState.chats = appState.chats.filter(c => c.id !== chatId);
+            if (appState.activeChatId === chatId) {
+                appState.activeChatId = appState.chats.length > 0 ? appState.chats[0].id : null;
+            }
+            saveChatsToStorage();
+            renderHistoryList();
+            renderMessages();
+        }
 
-                أهلاً 👋
+        function renderHistoryList() {
+            elements.historyList.innerHTML = '';
+            
+            if (appState.chats.length === 0) {
+                elements.historyList.innerHTML = `<div class="text-center py-6 text-xs text-slate-500">لا توجد محادثات سابقة</div>`;
+                return;
+            }
 
-                أنا ريمو.
+            appState.chats.forEach(chat => {
+                const isActive = chat.id === appState.activeChatId;
+                const item = document.createElement('div');
+                item.className = `group flex items-center justify-between p-2.5 rounded-xl cursor-pointer text-xs transition ${
+                    isActive 
+                        ? 'bg-slate-800 text-sky-400 font-medium border border-slate-700/60' 
+                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                }`;
+                item.onclick = () => selectChat(chat.id);
 
-                اكتب رسالتك للبدء.
+                item.innerHTML = `
+                    <div class="flex items-center gap-2.5 truncate">
+                        <i class="fa-regular fa-message text-slate-500 group-hover:text-sky-400"></i>
+                        <span class="truncate">${escapeHtml(chat.title)}</span>
+                    </div>
+                    <button onclick="deleteChat('${chat.id}', event)" class="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-1 transition" title="حذف">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+                elements.historyList.appendChild(item);
+            });
+        }
 
-            </div>
+        function copyToClipboard(button) {
+            const container = button.closest('.prose');
+            if (!container) return;
+            
+            const textToCopy = container.querySelector('.message-content').innerText;
+            
+            // Clipboard fallback as specified
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
 
-        `;
+            const span = button.querySelector('span');
+            const originalText = span.textContent;
+            span.textContent = 'تم النسخ!';
+            button.classList.add('text-emerald-400');
 
+            setTimeout(() => {
+                span.textContent = originalText;
+                button.classList.remove('text-emerald-400');
+            }, 2000);
+        }
 
-    /*
-    -----------------------------------------
-    Reset API
-    -----------------------------------------
-    */
+        function setupEventListeners() {
+            // Form Submit
+            elements.chatForm.addEventListener('submit', handleSendMessage);
+            elements.stopBtn.addEventListener('click', stopGeneration);
 
-    document
-        .getElementById("apiKeyBox")
-        .style.display = "none";
+            // Auto resize Textarea
+            elements.userPrompt.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
 
+            // Enter key to send (Shift+Enter for newline)
+            elements.userPrompt.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                }
+            });
 
-    document
-        .getElementById("apiKeyBox")
-        .textContent = "";
+            // Model Selection
+            elements.modelSelect.addEventListener('change', (e) => {
+                appState.selectedModel = e.target.value;
+                saveConfigToStorage();
+                showToast(`تم اختيار الموديل: ${appState.selectedModel}`);
+            });
 
+            elements.refreshModelsBtn.addEventListener('click', () => {
+                checkBackendConnection();
+            });
 
-    document
-        .getElementById("apiExample")
-        .textContent =
-            'اضغط "إنشاء API Key" للحصول على مثال الاستخدام.';
+            // Quick Prompts
+            document.querySelectorAll('.quick-prompt').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    elements.userPrompt.value = btn.innerText.replace(/\n/g, ' ').trim();
+                    handleSendMessage();
+                });
+            });
 
+            // Settings Modal Events
+            elements.openSettingsBtn.addEventListener('click', () => elements.settingsModal.classList.remove('hidden'));
+            elements.closeSettingsBtn.addEventListener('click', () => elements.settingsModal.classList.add('hidden'));
+            elements.tempInput.addEventListener('input', (e) => elements.tempValue.textContent = e.target.value);
 
-    /*
-    -----------------------------------------
-    Focus username
-    -----------------------------------------
-    */
+            elements.saveSettingsBtn.addEventListener('click', () => {
+                appState.backendUrl = elements.backendUrlInput.value.trim();
+                appState.apiKey = elements.apiKeyInput.value.trim();
+                appState.systemPrompt = elements.systemPromptInput.value.trim();
+                appState.temperature = parseFloat(elements.tempInput.value);
+                appState.stream = elements.streamToggle.checked;
 
-    setTimeout(() => {
+                saveConfigToStorage();
+                updateUrlDisplay();
+                elements.settingsModal.classList.add('hidden');
+                showToast('تم حفظ الإعدادات بنجاح');
+                checkBackendConnection();
+            });
 
-        document
-            .getElementById("username")
-            .focus();
+            // Mobile Sidebar Toggles
+            elements.openSidebarMobile.addEventListener('click', () => {
+                elements.sidebar.classList.remove('-right-72');
+                elements.sidebar.classList.add('right-0');
+                elements.sidebarOverlay.classList.remove('hidden');
+            });
 
-    }, 100);
-}
+            const closeSidebar = () => {
+                elements.sidebar.classList.add('-right-72');
+                elements.sidebar.classList.remove('right-0');
+                elements.sidebarOverlay.classList.add('hidden');
+            };
 
+            elements.closeSidebarMobile.addEventListener('click', closeSidebar);
+            elements.sidebarOverlay.addEventListener('click', closeSidebar);
 
-/*
-===========================================================
- AUTO LOGIN
-===========================================================
-*/
+            // History Actions
+            elements.newChatBtn.addEventListener('click', createNewChat);
+            elements.clearHistoryBtn.addEventListener('click', () => {
+                appState.chats = [];
+                appState.activeChatId = null;
+                saveChatsToStorage();
+                renderHistoryList();
+                renderMessages();
+                showToast('تم مسح جميع المحادثات');
+            });
+        }
 
-const savedUser =
-    localStorage.getItem(
-        "remo_user"
-    );
-
-
-if (savedUser) {
-
-    try {
-
-        user =
-            JSON.parse(savedUser);
-
-
-        const savedUsage =
-            localStorage.getItem(
-
-                "remo_usage_" +
-                user.username.toLowerCase()
-
-            );
-
-
-        usedMessages =
-            savedUsage
-                ? parseInt(
-                    savedUsage,
-                    10
-                )
-                : 0;
-
-
-        showApp();
-
-    } catch (error) {
-
-        localStorage.removeItem(
-            "remo_user"
-        );
-
-        console.error(error);
-    }
-}
-
-</script>
-
+        // Initialize application when page loads
+        window.onload = initApp;
+    </script>
 </body>
 </html>
