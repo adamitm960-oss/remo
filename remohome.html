@@ -6,7 +6,6 @@
 
     <title>REMO AI</title>
 
-    <!-- Google -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <style>
@@ -19,16 +18,16 @@
             min-height: 100vh;
             font-family: Arial, Tahoma, sans-serif;
             background:
-                radial-gradient(circle at top right, #273b78, transparent 35%),
-                radial-gradient(circle at bottom left, #164653, transparent 35%),
-                #080b14;
+                radial-gradient(circle at top right, #243b70 0%, transparent 35%),
+                radial-gradient(circle at bottom left, #111c3a 0%, transparent 35%),
+                #070b16;
             color: #fff;
         }
 
         button,
         input,
         textarea {
-            font: inherit;
+            font-family: inherit;
         }
 
         .hidden {
@@ -37,7 +36,7 @@
 
         /* LOGIN */
 
-        #loginPage {
+        #loginScreen {
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -45,62 +44,49 @@
             padding: 20px;
         }
 
-        .login-box {
-            width: 100%;
-            max-width: 430px;
+        .login-card {
+            width: min(430px, 100%);
             padding: 40px 30px;
             text-align: center;
-
-            background: rgba(255,255,255,.06);
             border: 1px solid rgba(255,255,255,.12);
-            border-radius: 25px;
-
+            border-radius: 28px;
+            background: rgba(15,20,35,.82);
             backdrop-filter: blur(20px);
-            box-shadow: 0 30px 80px rgba(0,0,0,.4);
+            box-shadow: 0 30px 80px rgba(0,0,0,.45);
         }
 
         .logo {
-            width: 75px;
-            height: 75px;
+            width: 76px;
+            height: 76px;
             margin: 0 auto 20px;
-
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            border-radius: 22px;
-
-            font-size: 30px;
+            font-size: 38px;
             font-weight: bold;
-
-            background: linear-gradient(
-                135deg,
-                #6d5dfc,
-                #00c6ff
-            );
+            background: linear-gradient(135deg,#635bff,#00b7ff);
         }
 
-        .login-box h1 {
-            margin-bottom: 10px;
+        .login-card h1 {
+            margin: 0 0 10px;
+            font-size: 30px;
         }
 
-        .login-description {
-            color: #a7afc1;
-            margin-bottom: 25px;
+        .login-card p {
+            color: #aeb8d0;
+            margin-bottom: 30px;
         }
 
         #googleButton {
-            min-height: 50px;
-
             display: flex;
             justify-content: center;
-            align-items: center;
+            min-height: 44px;
         }
 
-        #loginError {
+        .error {
+            color: #ff7b8a;
             margin-top: 15px;
-            min-height: 25px;
-            color: #ff7373;
             font-size: 14px;
         }
 
@@ -113,330 +99,316 @@
         .topbar {
             position: sticky;
             top: 0;
-            z-index: 100;
-
-            background: rgba(8,11,20,.88);
-            border-bottom: 1px solid rgba(255,255,255,.08);
-
-            backdrop-filter: blur(20px);
-        }
-
-        .topbar-inner {
-            max-width: 1200px;
-            margin: auto;
-            padding: 13px 20px;
-
+            z-index: 50;
+            min-height: 70px;
+            padding: 12px 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 15px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            background: rgba(7,11,22,.82);
+            backdrop-filter: blur(18px);
         }
 
-        .user-info {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .mini-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg,#635bff,#00b7ff);
+        }
+
+        .user-area {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .avatar {
-            width: 44px;
-            height: 44px;
+        .user-avatar {
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
-            background: #222a3b;
-        }
-
-        .user-name {
-            font-weight: bold;
-        }
-
-        .user-role {
-            color: #9ca5b8;
-            font-size: 12px;
-            margin-top: 4px;
         }
 
         .quota {
-            padding: 9px 16px;
+            padding: 9px 14px;
             border-radius: 12px;
-
-            background: rgba(0,198,255,.1);
-            border: 1px solid rgba(0,198,255,.2);
-        }
-
-        .quota strong {
-            color: #00c6ff;
-            font-size: 18px;
+            background: rgba(255,255,255,.08);
+            color: #dce5ff;
+            font-size: 13px;
         }
 
         .logout {
             border: 0;
-            padding: 10px 17px;
-
             border-radius: 10px;
-
-            color: #fff;
-            background: rgba(255,255,255,.08);
-
+            padding: 9px 13px;
             cursor: pointer;
-        }
-
-        .logout:hover {
-            background: rgba(255,255,255,.15);
+            color: white;
+            background: #e5484d;
         }
 
         .logout:disabled {
-            opacity: .35;
+            opacity: .45;
             cursor: not-allowed;
         }
 
-        /* MAIN */
-
-        .container {
-            max-width: 1200px;
+        .layout {
+            width: min(1250px, 100%);
             margin: auto;
-            padding: 30px 20px;
-        }
-
-        .grid {
+            padding: 25px;
             display: grid;
-            grid-template-columns: minmax(0,1fr) 330px;
+            grid-template-columns: 280px 1fr;
             gap: 20px;
         }
 
-        .card {
-            background: rgba(255,255,255,.055);
-            border: 1px solid rgba(255,255,255,.1);
+        .panel {
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 22px;
+            background: rgba(15,20,35,.75);
+            backdrop-filter: blur(18px);
+        }
+
+        .sidebar {
+            padding: 20px;
+        }
+
+        .profile {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .profile img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile h3 {
+            margin: 10px 0 4px;
+        }
+
+        .profile small {
+            color: #8e99b5;
+            word-break: break-word;
+        }
+
+        .role {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
             border-radius: 20px;
-            backdrop-filter: blur(15px);
+            font-size: 12px;
+            background: rgba(99,91,255,.2);
+            color: #a9a2ff;
+        }
+
+        .side-button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            background: rgba(255,255,255,.07);
+        }
+
+        .side-button:hover {
+            background: rgba(255,255,255,.12);
         }
 
         /* CHAT */
 
-        .chat {
-            min-height: 650px;
-            padding: 22px;
-
+        .chat-panel {
+            min-height: 700px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
-        .chat h2 {
-            margin-top: 0;
+        .chat-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .chat-header h2 {
+            margin: 0 0 5px;
+        }
+
+        .chat-header span {
+            color: #8e99b5;
+            font-size: 13px;
         }
 
         #messages {
             flex: 1;
-            min-height: 450px;
-            max-height: 520px;
-
+            min-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
-
-            padding: 10px 5px;
+            padding: 25px;
         }
 
         .message {
             max-width: 80%;
-            padding: 12px 15px;
-            margin-bottom: 12px;
-
-            border-radius: 16px;
-
+            margin-bottom: 15px;
+            padding: 13px 16px;
+            border-radius: 17px;
             line-height: 1.7;
-            word-break: break-word;
+            white-space: pre-wrap;
         }
 
-        .message.me {
+        .message.user {
             margin-right: auto;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #5b4df6,
-                    #3478f6
-                );
-        }
-
-        .message.other {
-            margin-left: auto;
-            background: rgba(255,255,255,.09);
+            background: linear-gradient(135deg,#635bff,#4361ee);
         }
 
         .message.ai {
             margin-left: auto;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #116466,
-                    #087f8c
-                );
+            background: rgba(255,255,255,.08);
         }
 
-        .message-meta {
-            margin-top: 5px;
-            font-size: 11px;
-            opacity: .6;
+        .message.system {
+            max-width: 100%;
+            text-align: center;
+            color: #8e99b5;
+            background: transparent;
         }
-
-        /* COMPOSER */
 
         .composer {
+            padding: 18px;
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,.08);
         }
 
-        #messageInput {
+        #prompt {
             flex: 1;
-
-            min-height: 58px;
-
-            resize: none;
-
-            padding: 15px;
-
-            outline: none;
-
+            min-height: 50px;
+            max-height: 140px;
+            resize: vertical;
+            padding: 14px;
             border: 1px solid rgba(255,255,255,.1);
+            outline: none;
             border-radius: 14px;
-
-            background: rgba(0,0,0,.2);
-
             color: white;
-        }
-
-        #messageInput:focus {
-            border-color: rgba(0,198,255,.5);
+            background: rgba(0,0,0,.2);
         }
 
         #sendButton {
-            min-width: 100px;
-
+            width: 110px;
             border: 0;
             border-radius: 14px;
-
-            color: white;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #6d5dfc,
-                    #00aaff
-                );
-
             cursor: pointer;
+            color: white;
+            background: linear-gradient(135deg,#635bff,#00a8ff);
         }
 
         #sendButton:disabled {
-            opacity: .35;
+            opacity: .5;
             cursor: not-allowed;
         }
 
         /* ADMIN */
 
-        .admin-panel {
-            padding: 22px;
+        #adminPanel {
+            width: min(1250px, calc(100% - 50px));
+            margin: 0 auto 30px;
+            padding: 20px;
         }
 
-        .admin-panel h3 {
-            margin-top: 0;
+        .admin-title {
+            margin-bottom: 15px;
         }
 
-        .muted {
-            color: #9ca5b8;
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .admin-user {
-            padding: 13px;
-            margin-bottom: 10px;
-
-            border-radius: 13px;
-
-            background: rgba(255,255,255,.05);
+        .users-table th,
+        .users-table td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255,255,255,.08);
         }
 
-        .admin-user small {
-            color: #9ca5b8;
+        .users-table th {
+            color: #9aa6c2;
         }
 
-        .admin-actions {
-            display: flex;
-            gap: 7px;
-            margin-top: 10px;
-        }
-
-        .admin-actions input {
-            width: 80px;
-
-            padding: 7px;
-
+        .quota-input {
+            width: 90px;
+            padding: 8px;
             border: 1px solid rgba(255,255,255,.12);
             border-radius: 8px;
-
-            background: rgba(0,0,0,.25);
-            color: white;
             outline: none;
-        }
-
-        .admin-actions button {
-            border: 0;
-
-            padding: 7px 10px;
-
-            border-radius: 8px;
-
             color: white;
-            background: #3457d5;
-
-            cursor: pointer;
+            background: #101728;
         }
 
-        /* NOTIFICATION */
+        .add-quota {
+            padding: 8px 12px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            background: #2f9e44;
+        }
 
-        #notification {
+        .notification {
             position: fixed;
-
             left: 20px;
             bottom: 20px;
-
-            z-index: 9999;
-
-            padding: 14px 18px;
-
-            border-radius: 12px;
-
-            background: #1d2435;
-
-            border: 1px solid rgba(255,255,255,.12);
-
+            z-index: 100;
+            max-width: 340px;
+            padding: 15px 18px;
+            border-radius: 14px;
+            background: #1c2540;
             box-shadow: 0 15px 40px rgba(0,0,0,.4);
+            display: none;
         }
 
-        /* MOBILE */
-
-        @media(max-width:800px) {
-
-            .grid {
+        @media(max-width: 800px) {
+            .layout {
                 grid-template-columns: 1fr;
+                padding: 12px;
             }
 
-            .topbar-inner {
-                flex-wrap: wrap;
+            .sidebar {
+                order: 2;
             }
 
-            .quota {
-                width: 100%;
-                order: 3;
-                text-align: center;
-            }
-
-            .chat {
-                min-height: 550px;
+            .chat-panel {
+                min-height: 600px;
             }
 
             #messages {
-                min-height: 350px;
+                min-height: 400px;
+            }
+
+            .topbar {
+                padding: 10px;
+            }
+
+            .user-email {
+                display: none;
+            }
+
+            #adminPanel {
+                width: calc(100% - 24px);
             }
         }
     </style>
@@ -444,89 +416,52 @@
 
 <body>
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- LOGIN -->
+<section id="loginScreen">
 
-<section id="loginPage">
+    <div class="login-card">
 
-    <div class="login-box">
+        <div class="logo">R</div>
 
-        <div class="logo">
-            R
-        </div>
+        <h1>REMO AI</h1>
 
-        <h1>
-            REMO AI
-        </h1>
+        <p>سجل الدخول باستخدام حساب Google</p>
 
-        <div class="login-description">
-            سجل الدخول باستخدام حساب Google
-        </div>
-
-        <!-- Google Button -->
         <div id="googleButton"></div>
 
-        <div id="loginError"></div>
+        <div id="loginError" class="error"></div>
 
     </div>
 
 </section>
 
 
-<!-- =========================
-     APPLICATION
-========================= -->
-
+<!-- APP -->
 <div id="app" class="hidden">
 
     <header class="topbar">
 
-        <div class="topbar-inner">
+        <div class="brand">
+            <div class="mini-logo">R</div>
+            <span>REMO AI</span>
+        </div>
 
-            <div class="user-info">
+        <div class="user-area">
 
-                <img
-                    id="avatar"
-                    class="avatar"
-                    alt="avatar"
-                >
-
-                <div>
-
-                    <div
-                        id="userName"
-                        class="user-name">
-                    </div>
-
-                    <div
-                        id="userRole"
-                        class="user-role">
-                    </div>
-
-                </div>
-
+            <div id="quotaBox" class="quota">
+                المتبقي: ...
             </div>
 
+            <img id="topAvatar"
+                 class="user-avatar"
+                 src=""
+                 alt="">
 
-            <div class="quota">
+            <span id="topName" class="user-email"></span>
 
-                المتبقي:
-
-                <strong id="quota">
-                    700
-                </strong>
-
-                رسالة
-
-            </div>
-
-
-            <button
-                id="logoutButton"
-                class="logout"
-                onclick="logout()"
-            >
+            <button id="logoutButton"
+                    class="logout"
+                    onclick="logout()">
                 خروج
             </button>
 
@@ -535,157 +470,207 @@
     </header>
 
 
-    <main class="container">
+    <main class="layout">
 
-        <div class="grid">
+        <aside class="sidebar panel">
 
-            <!-- CHAT -->
+            <div class="profile">
 
-            <section class="card chat">
+                <img id="profileAvatar"
+                     src=""
+                     alt="">
 
-                <h2>
-                    REMO AI
-                </h2>
+                <h3 id="profileName">-</h3>
 
-                <div id="messages"></div>
+                <small id="profileEmail">-</small>
 
-
-                <div class="composer">
-
-                    <textarea
-                        id="messageInput"
-                        placeholder="اكتب رسالتك..."
-                    ></textarea>
-
-                    <button
-                        id="sendButton"
-                        onclick="sendMessage()"
-                    >
-                        إرسال
-                    </button>
-
+                <div id="profileRole" class="role">
+                    Guest
                 </div>
 
-            </section>
+            </div>
+
+            <button class="side-button"
+                    onclick="openAdminMessages()">
+                💬 رسائل الإدارة
+            </button>
+
+            <button id="adminButton"
+                    class="side-button hidden"
+                    onclick="loadUsers()">
+                👑 إدارة المستخدمين
+            </button>
+
+        </aside>
 
 
-            <!-- ADMIN -->
+        <section class="chat-panel panel">
 
-            <aside
-                id="adminPanel"
-                class="card admin-panel hidden"
-            >
+            <div class="chat-header">
 
-                <h3>
-                    لوحة الأدمن
-                </h3>
+                <h2>REMO AI</h2>
 
-                <p class="muted">
-                    المستخدمون
-                </p>
+                <span>
+                    اسأل الذكاء الاصطناعي
+                </span>
 
-                <div id="usersList"></div>
+            </div>
 
-            </aside>
+
+            <div id="messages">
+
+                <div class="message system">
+                    أهلاً بك في REMO AI 👋
+                </div>
+
+            </div>
+
+
+            <div class="composer">
+
+                <textarea
+                    id="prompt"
+                    placeholder="اكتب رسالتك هنا..."
+                    onkeydown="handleKey(event)"
+                ></textarea>
+
+                <button
+                    id="sendButton"
+                    onclick="sendMessage()">
+                    إرسال
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ADMIN PANEL -->
+
+    <section id="adminPanel"
+             class="panel hidden">
+
+        <h2 class="admin-title">
+            👑 إدارة المستخدمين
+        </h2>
+
+        <div style="overflow-x:auto">
+
+            <table class="users-table">
+
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>الإيميل</th>
+                        <th>النوع</th>
+                        <th>المستخدم</th>
+                        <th>المتبقي</th>
+                        <th>إضافة Quota</th>
+                    </tr>
+                </thead>
+
+                <tbody id="usersTable"></tbody>
+
+            </table>
 
         </div>
 
-    </main>
+    </section>
 
 </div>
 
 
-<div
-    id="notification"
-    class="hidden">
+<div id="notification"
+     class="notification">
 </div>
 
 
 <script>
 
-/* =====================================================
-   CONFIG
-===================================================== */
+const API_URL =
+    "https://ballet-traveller-christmas-monitors.trycloudflare.com/api.php";
 
 const GOOGLE_CLIENT_ID =
     "610561621500-4fk159dv20phoqb3qj90uc0kqsb9tb1i.apps.googleusercontent.com";
 
-
-/*
- * PHP BACKEND
- */
-const API_URL =
-    "https://ballet-traveller-christmas-monitors.trycloudflare.com/api.php";
-
-
-const ADMIN_EMAIL =
-    "adamitm960@gmail.com";
-
-
 let currentUser = null;
-let pollTimer = null;
 
 
-/* =====================================================
-   START
-===================================================== */
+/* =========================
+   API
+========================= */
 
-window.addEventListener("load", () => {
+async function api(action, data = {}) {
 
-    waitForGoogle();
+    const response = await fetch(API_URL, {
 
-});
+        method: "POST",
 
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-function waitForGoogle() {
+        body: JSON.stringify({
+            action,
+            ...data
+        })
 
-    if (
-        window.google &&
-        google.accounts &&
-        google.accounts.id
-    ) {
+    });
 
-        initGoogle();
+    const text = await response.text();
 
-        return;
+    let result;
 
+    try {
+        result = JSON.parse(text);
+    } catch {
+        throw new Error(
+            "الـPHP رجع Response غير صالح: " + text
+        );
     }
 
-    setTimeout(
-        waitForGoogle,
-        300
-    );
+    if (!response.ok || result.success === false) {
+        throw new Error(
+            result.message || "حدث خطأ في API"
+        );
+    }
+
+    return result;
 }
 
 
-/* =====================================================
+/* =========================
    GOOGLE LOGIN
-===================================================== */
+========================= */
 
 function initGoogle() {
 
+    if (!window.google ||
+        !google.accounts ||
+        !google.accounts.id) {
+
+        setTimeout(initGoogle, 500);
+        return;
+    }
+
     google.accounts.id.initialize({
 
-        client_id:
-            610561621500-4fk159dv20phoqb3qj90uc0kqsb9tb1i.apps.googleusercontent.com,
+        client_id: GOOGLE_CLIENT_ID,
 
-        callback:
-            googleLogin,
+        callback: googleLogin,
 
-        auto_select:
-            false,
+        auto_select: false,
 
-        cancel_on_tap_outside:
-            true
+        cancel_on_tap_outside: true
 
     });
 
 
     google.accounts.id.renderButton(
 
-        document.getElementById(
-            "googleButton"
-        ),
+        document.getElementById("googleButton"),
 
         {
             theme: "filled_black",
@@ -696,20 +681,351 @@ function initGoogle() {
         }
 
     );
-
 }
 
 
 async function googleLogin(response) {
 
+    const errorBox =
+        document.getElementById("loginError");
+
+    errorBox.textContent = "";
+
+    try {
+
+        const result = await api(
+            "login",
+            {
+                credential: response.credential
+            }
+        );
+
+        currentUser = result.user;
+
+        localStorage.setItem(
+            "remo_user",
+            JSON.stringify(currentUser)
+        );
+
+        showApp();
+
+    } catch (error) {
+
+        console.error(error);
+
+        errorBox.textContent =
+            error.message ||
+            "فشل تسجيل الدخول";
+
+    }
+}
+
+
+/* =========================
+   SHOW APP
+========================= */
+
+function showApp() {
+
+    document
+        .getElementById("loginScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+    updateUserUI();
+
+    loadConversation();
+
+    if (currentUser.role === "admin") {
+
+        document
+            .getElementById("adminButton")
+            .classList.remove("hidden");
+
+        loadUsers();
+    }
+}
+
+
+function updateUserUI() {
+
+    if (!currentUser) return;
+
+    document.getElementById("topName").textContent =
+        currentUser.name || currentUser.email;
+
+    document.getElementById("profileName").textContent =
+        currentUser.name || "User";
+
+    document.getElementById("profileEmail").textContent =
+        currentUser.email;
+
+    document.getElementById("profileRole").textContent =
+        currentUser.role === "admin"
+            ? "ADMIN"
+            : "GUEST";
+
+
+    const avatar =
+        currentUser.picture ||
+        "https://www.gravatar.com/avatar/?d=mp";
+
+    document.getElementById("topAvatar").src =
+        avatar;
+
+    document.getElementById("profileAvatar").src =
+        avatar;
+
+
+    updateQuota();
+}
+
+
+function updateQuota() {
+
+    const box =
+        document.getElementById("quotaBox");
+
+    const send =
+        document.getElementById("sendButton");
+
+    const logoutBtn =
+        document.getElementById("logoutButton");
+
+
+    if (currentUser.role === "admin") {
+
+        box.textContent =
+            "المتبقي: ∞";
+
+        send.disabled = false;
+
+        logoutBtn.disabled = false;
+
+        return;
+    }
+
+
+    box.textContent =
+        "المتبقي: " +
+        Number(currentUser.remaining || 0);
+
+
+    if (Number(currentUser.remaining || 0) <= 0) {
+
+        send.disabled = true;
+
+        /*
+         * حسب طلبك:
+         * عند انتهاء الـQuota لا يستطيع Guest
+         * تسجيل الخروج.
+         */
+        logoutBtn.disabled = true;
+
+    } else {
+
+        send.disabled = false;
+        logoutBtn.disabled = false;
+    }
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+function addMessage(type, text) {
+
+    const container =
+        document.getElementById("messages");
+
+    const div =
+        document.createElement("div");
+
+    div.className =
+        "message " + type;
+
+    div.textContent = text;
+
+    container.appendChild(div);
+
+    container.scrollTop =
+        container.scrollHeight;
+}
+
+
+async function sendMessage() {
+
+    if (!currentUser) return;
+
+    const input =
+        document.getElementById("prompt");
+
+    const button =
+        document.getElementById("sendButton");
+
+    const prompt =
+        input.value.trim();
+
+    if (!prompt) return;
+
+
     if (
-        !response ||
-        !response.credential
+        currentUser.role !== "admin" &&
+        Number(currentUser.remaining || 0) <= 0
     ) {
 
-        loginError(
-            "Google لم يرجع بيانات صحيحة."
+        showNotification(
+            "انتهى الـQuota الخاص بك"
         );
+
+        return;
+    }
+
+
+    addMessage("user", prompt);
+
+    input.value = "";
+
+    button.disabled = true;
+
+    try {
+
+        const result =
+            await api(
+                "chat",
+                {
+                    email: currentUser.email,
+                    message: prompt
+                }
+            );
+
+
+        addMessage(
+            "ai",
+            result.reply || "لم يتم استلام رد."
+        );
+
+
+        if (result.user) {
+
+            currentUser =
+                result.user;
+
+            localStorage.setItem(
+                "remo_user",
+                JSON.stringify(currentUser)
+            );
+
+            updateUserUI();
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        addMessage(
+            "system",
+            "❌ " + error.message
+        );
+
+    } finally {
+
+        if (
+            currentUser &&
+            (
+                currentUser.role === "admin" ||
+                Number(currentUser.remaining || 0) > 0
+            )
+        ) {
+
+            button.disabled = false;
+        }
+    }
+}
+
+
+function handleKey(event) {
+
+    if (
+        event.key === "Enter" &&
+        !event.shiftKey
+    ) {
+
+        event.preventDefault();
+
+        sendMessage();
+    }
+}
+
+
+/* =========================
+   LOAD CONVERSATION
+========================= */
+
+async function loadConversation() {
+
+    if (!currentUser) return;
+
+    try {
+
+        const result =
+            await api(
+                "history",
+                {
+                    email: currentUser.email
+                }
+            );
+
+
+        const container =
+            document.getElementById("messages");
+
+        container.innerHTML = "";
+
+
+        if (!result.messages ||
+            result.messages.length === 0) {
+
+            addMessage(
+                "system",
+                "أهلاً بك في REMO AI 👋"
+            );
+
+            return;
+        }
+
+
+        result.messages.forEach(message => {
+
+            addMessage(
+                message.role === "user"
+                    ? "user"
+                    : "ai",
+                message.content
+            );
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+
+/* =========================
+   ADMIN USERS
+========================= */
+
+async function loadUsers() {
+
+    if (!currentUser ||
+        currentUser.role !== "admin") {
 
         return;
     }
@@ -719,957 +1035,259 @@ async function googleLogin(response) {
 
         const result =
             await api(
-                "google_login",
+                "users",
                 {
-                    credential:
-                        response.credential
+                    email: currentUser.email
                 }
             );
 
 
-        if (!result.success) {
+        const tbody =
+            document.getElementById("usersTable");
 
-            throw new Error(
-                result.message ||
-                "فشل تسجيل الدخول"
-            );
-
-        }
+        tbody.innerHTML = "";
 
 
-        currentUser =
-            result.user;
+        result.users.forEach(user => {
+
+            const tr =
+                document.createElement("tr");
+
+            const remaining =
+                user.role === "admin"
+                    ? "∞"
+                    : user.remaining;
 
 
-        showApp();
+            tr.innerHTML = `
 
-        await loadMessages();
+                <td>${escapeHtml(user.name || "-")}</td>
 
-        if (
-            currentUser.role ===
-            "admin"
-        ) {
+                <td>${escapeHtml(user.email || "-")}</td>
 
-            await loadUsers();
+                <td>${user.role}</td>
 
-        }
+                <td>${user.used || 0}</td>
 
+                <td>${remaining}</td>
 
-        startPolling();
+                <td>
 
+                    ${
+                        user.role === "admin"
+                        ? "-"
+                        : `
+                        <input
+                            id="quota_${encodeURIComponent(user.email)}"
+                            class="quota-input"
+                            type="number"
+                            min="1"
+                            value="100"
+                        >
 
-    } catch(error) {
+                        <button
+                            class="add-quota"
+                            onclick="addQuota('${escapeJs(user.email)}')">
+                            + إضافة
+                        </button>
+                        `
+                    }
 
-        console.error(error);
+                </td>
 
-        loginError(
-            error.message
-        );
+            `;
 
-    }
+            tbody.appendChild(tr);
 
-}
+        });
 
-
-/* =====================================================
-   API
-===================================================== */
-
-async function api(
-    action,
-    data = {}
-) {
-
-    const response =
-        await fetch(
-            API_URL,
-            {
-                method: "POST",
-
-                credentials: "include",
-
-                headers: {
-                    "Content-Type":
-                        "application/json",
-
-                    "Accept":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify({
-                        action,
-                        ...data
-                    })
-            }
-        );
-
-
-    const text =
-        await response.text();
-
-
-    let result;
-
-    try {
-
-        result =
-            JSON.parse(text);
-
-    } catch(e) {
-
-        console.error(text);
-
-        throw new Error(
-            "الـPHP Backend لم يرجع JSON صحيح."
-        );
-
-    }
-
-
-    return result;
-}
-
-
-/* =====================================================
-   SHOW APP
-===================================================== */
-
-function showApp() {
-
-    document
-        .getElementById("loginPage")
-        .classList.add("hidden");
-
-
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-
-    document
-        .getElementById("userName")
-        .textContent =
-            currentUser.name;
-
-
-    document
-        .getElementById("userRole")
-        .textContent =
-
-            currentUser.role === "admin"
-                ? "Administrator"
-                : "Guest";
-
-
-    if (currentUser.picture) {
-
-        document
-            .getElementById("avatar")
-            .src =
-                currentUser.picture;
-
-    }
-
-
-    if (
-        currentUser.role === "admin"
-    ) {
 
         document
             .getElementById("adminPanel")
             .classList.remove("hidden");
 
 
-        document
-            .getElementById("quota")
-            .textContent = "∞";
+    } catch (error) {
 
-    } else {
-
-        updateQuota(
-            currentUser.quota
-        );
-
-    }
-
-
-    updateControls();
-}
-
-
-/* =====================================================
-   QUOTA
-===================================================== */
-
-function updateQuota(value) {
-
-    currentUser.quota =
-        Number(value);
-
-
-    document
-        .getElementById("quota")
-        .textContent =
-            currentUser.quota;
-
-
-    updateControls();
-}
-
-
-/* =====================================================
-   CONTROLS
-===================================================== */
-
-function updateControls() {
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const send =
-        document.getElementById(
-            "sendButton"
-        );
-
-
-    const logout =
-        document.getElementById(
-            "logoutButton"
-        );
-
-
-    if (
-        currentUser.role ===
-        "admin"
-    ) {
-
-        input.disabled = false;
-        send.disabled = false;
-        logout.disabled = false;
-
-        return;
-    }
-
-
-    const zero =
-        Number(
-            currentUser.quota
-        ) <= 0;
-
-
-    input.disabled =
-        zero;
-
-
-    send.disabled =
-        zero;
-
-
-    /*
-     * حسب طلبك:
-     * عند انتهاء الكوست
-     * زر الخروج يتوقف
-     */
-    logout.disabled =
-        zero;
-
-
-    if (zero) {
-
-        input.placeholder =
-            "انتهى رصيد الرسائل";
-
-    } else {
-
-        input.placeholder =
-            "اكتب رسالتك...";
-
-    }
-
-}
-
-
-/* =====================================================
-   SEND MESSAGE
-===================================================== */
-
-async function sendMessage() {
-
-    if (!currentUser) {
-        return;
-    }
-
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) {
-        return;
-    }
-
-
-    if (
-        currentUser.role !== "admin" &&
-        Number(currentUser.quota) <= 0
-    ) {
-
-        notify(
-            "انتهى رصيد الرسائل."
-        );
-
-        return;
-    }
-
-
-    input.disabled = true;
-
-
-    try {
-
-        const result =
-            await api(
-                "send_message",
-                {
-                    message: text
-                }
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-                result.message ||
-                "فشل إرسال الرسالة"
-            );
-
-        }
-
-
-        input.value = "";
-
-
-        if (
-            currentUser.role !== "admin"
-        ) {
-
-            updateQuota(
-                result.remaining
-            );
-
-        }
-
-
-        await loadMessages();
-
-
-        /*
-         * اطلب الرد من LiteLLM
-         */
-        const ai =
-            await api(
-                "ai",
-                {
-                    message: text
-                }
-            );
-
-
-        if (ai.success && ai.answer) {
-
-            addMessage(
-                {
-                    sender_name:
-                        "REMO AI",
-
-                    sender_email:
-                        "ai",
-
-                    message:
-                        ai.answer,
-
-                    type:
-                        "ai"
-                }
-            );
-
-        }
-
-
-    } catch(error) {
-
-        console.error(error);
-
-        notify(
+        showNotification(
             error.message
         );
-
     }
-
-
-    updateControls();
 }
 
 
-/* =====================================================
-   LOAD MESSAGES
-===================================================== */
+async function addQuota(email) {
 
-async function loadMessages() {
+    const input =
+        document.getElementById(
+            "quota_" +
+            encodeURIComponent(email)
+        );
 
-    if (!currentUser) {
+    const amount =
+        Number(input.value);
+
+
+    if (!amount || amount <= 0) {
+
+        showNotification(
+            "اكتب عدد صحيح أكبر من صفر"
+        );
+
         return;
     }
 
 
     try {
 
+        await api(
+            "add_quota",
+            {
+                admin_email:
+                    currentUser.email,
+
+                user_email:
+                    email,
+
+                amount
+            }
+        );
+
+
+        showNotification(
+            "تمت إضافة الـQuota بنجاح ✅"
+        );
+
+
+        loadUsers();
+
+
+    } catch (error) {
+
+        showNotification(
+            error.message
+        );
+    }
+}
+
+
+/* =========================
+   ADMIN MESSAGES
+========================= */
+
+async function openAdminMessages() {
+
+    if (!currentUser) return;
+
+
+    try {
+
         const result =
             await api(
-                "get_messages"
+                "messages",
+                {
+                    email:
+                        currentUser.email
+                }
             );
 
 
-        if (!result.success) {
+        if (!result.messages.length) {
+
+            showNotification(
+                "لا توجد رسائل جديدة"
+            );
+
             return;
         }
 
 
-        renderMessages(
-            result.messages || []
-        );
+        result.messages.forEach(message => {
 
-
-    } catch(error) {
-
-        console.error(error);
-
-    }
-
-}
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function renderMessages(messages) {
-
-    const box =
-        document.getElementById(
-            "messages"
-        );
-
-
-    box.innerHTML = "";
-
-
-    messages.forEach(
-        message => {
-
-            addMessage(
-                message,
-                false
+            showNotification(
+                message.from_email +
+                ": " +
+                message.message
             );
 
-        }
-    );
+        });
 
 
-    box.scrollTop =
-        box.scrollHeight;
-}
+    } catch (error) {
 
-
-function addMessage(
-    message,
-    scroll = true
-) {
-
-    const box =
-        document.getElementById(
-            "messages"
-        );
-
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    if (
-        message.type === "ai"
-    ) {
-
-        div.className =
-            "message ai";
-
-    } else {
-
-        const mine =
-            String(
-                message.sender_email
-            ).toLowerCase() ===
-            String(
-                currentUser.email
-            ).toLowerCase();
-
-
-        div.className =
-            "message " +
-            (
-                mine
-                    ? "me"
-                    : "other"
-            );
-
-    }
-
-
-    const text =
-        document.createElement(
-            "div"
-        );
-
-
-    text.textContent =
-        message.message || "";
-
-
-    const meta =
-        document.createElement(
-            "div"
-        );
-
-
-    meta.className =
-        "message-meta";
-
-
-    meta.textContent =
-        message.sender_name ||
-        message.sender_email ||
-        "";
-
-
-    div.appendChild(text);
-    div.appendChild(meta);
-
-
-    box.appendChild(div);
-
-
-    if (scroll) {
-
-        box.scrollTop =
-            box.scrollHeight;
-
-    }
-
-}
-
-
-/* =====================================================
-   ADMIN USERS
-===================================================== */
-
-async function loadUsers() {
-
-    if (
-        currentUser.role !== "admin"
-    ) {
-
-        return;
-    }
-
-
-    const result =
-        await api(
-            "get_users"
-        );
-
-
-    if (!result.success) {
-        return;
-    }
-
-
-    const box =
-        document.getElementById(
-            "usersList"
-        );
-
-
-    box.innerHTML = "";
-
-
-    result.users.forEach(
-        user => {
-
-            if (
-                user.email.toLowerCase() ===
-                ADMIN_EMAIL.toLowerCase()
-            ) {
-                return;
-            }
-
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "admin-user";
-
-
-            div.innerHTML = `
-                <strong>
-                    ${escapeHtml(user.name)}
-                </strong>
-
-                <br>
-
-                <small>
-                    ${escapeHtml(user.email)}
-                </small>
-
-                <br>
-
-                <small>
-                    المتبقي:
-                    <b>${Number(user.quota)}</b>
-                </small>
-
-                <div class="admin-actions">
-
-                    <input
-                        type="number"
-                        min="1"
-                        value="100"
-                        id="amount-${encodeURIComponent(user.email)}"
-                    >
-
-                    <button
-                        onclick="addQuota(
-                            '${encodeURIComponent(user.email)}'
-                        )"
-                    >
-                        + إضافة
-                    </button>
-
-                </div>
-            `;
-
-
-            box.appendChild(div);
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   ADD QUOTA
-===================================================== */
-
-async function addQuota(
-    encodedEmail
-) {
-
-    const email =
-        decodeURIComponent(
-            encodedEmail
-        );
-
-
-    const input =
-        document.getElementById(
-            "amount-" +
-            encodeURIComponent(email)
-        );
-
-
-    const amount =
-        Number(
-            input.value
-        );
-
-
-    if (
-        !amount ||
-        amount <= 0
-    ) {
-
-        notify(
-            "اكتب عدد صحيح."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const result =
-            await api(
-                "add_quota",
-                {
-                    email,
-                    amount
-                }
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-                result.message
-            );
-
-        }
-
-
-        notify(
-            "تمت إضافة " +
-            amount +
-            " رسالة."
-        );
-
-
-        await loadUsers();
-
-
-    } catch(error) {
-
-        notify(
+        showNotification(
             error.message
         );
-
     }
-
 }
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+/* =========================
+   NOTIFICATIONS
+========================= */
 
-async function logout() {
-
-    if (
-        currentUser.role !== "admin" &&
-        Number(currentUser.quota) <= 0
-    ) {
-
-        notify(
-            "لا يمكنك تسجيل الخروج بعد انتهاء الكوست."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        await api(
-            "logout"
-        );
-
-    } catch(error) {
-
-        console.error(error);
-
-    }
-
-
-    if (pollTimer) {
-
-        clearInterval(
-            pollTimer
-        );
-
-        pollTimer = null;
-    }
-
-
-    currentUser = null;
-
-
-    document
-        .getElementById("app")
-        .classList.add("hidden");
-
-
-    document
-        .getElementById("loginPage")
-        .classList.remove("hidden");
-
-
-    document
-        .getElementById("messages")
-        .innerHTML = "";
-
-
-    document
-        .getElementById("usersList")
-        .innerHTML = "";
-
-
-    document
-        .getElementById("loginError")
-        .textContent = "";
-
-
-    if (
-        window.google &&
-        google.accounts &&
-        google.accounts.id
-    ) {
-
-        google.accounts.id.disableAutoSelect();
-
-    }
-
-}
-
-
-/* =====================================================
-   POLLING
-===================================================== */
-
-function startPolling() {
-
-    if (pollTimer) {
-
-        clearInterval(
-            pollTimer
-        );
-
-    }
-
-
-    pollTimer =
-        setInterval(
-            async () => {
-
-                if (!currentUser) {
-                    return;
-                }
-
-
-                await loadMessages();
-
-
-                /*
-                 * نجيب بيانات المستخدم
-                 * عشان الـquota تتحدث
-                 */
-                const me =
-                    await api(
-                        "me"
-                    );
-
-
-                if (
-                    me.success &&
-                    me.user
-                ) {
-
-                    currentUser =
-                        me.user;
-
-
-                    if (
-                        currentUser.role ===
-                        "admin"
-                    ) {
-
-                        document
-                            .getElementById(
-                                "quota"
-                            )
-                            .textContent =
-                                "∞";
-
-                        await loadUsers();
-
-                    } else {
-
-                        updateQuota(
-                            currentUser.quota
-                        );
-
-                    }
-
-                }
-
-
-            },
-            5000
-        );
-}
-
-
-/* =====================================================
-   NOTIFICATION
-===================================================== */
-
-function notify(text) {
+function showNotification(text) {
 
     const box =
         document.getElementById(
             "notification"
         );
 
+    box.textContent = text;
 
-    box.textContent =
-        text;
+    box.style.display = "block";
 
 
-    box.classList.remove(
-        "hidden"
+    clearTimeout(
+        window.notificationTimer
     );
 
 
-    setTimeout(
-        () => {
+    window.notificationTimer =
+        setTimeout(() => {
 
-            box.classList.add(
-                "hidden"
-            );
+            box.style.display =
+                "none";
 
-        },
-        3000
+        }, 4000);
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout() {
+
+    if (!currentUser) return;
+
+
+    if (
+        currentUser.role !== "admin" &&
+        Number(currentUser.remaining || 0) <= 0
+    ) {
+
+        showNotification(
+            "لا يمكنك تسجيل الخروج بعد انتهاء الـQuota"
+        );
+
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "remo_user"
     );
 
+    currentUser = null;
+
+    location.reload();
 }
 
 
-function loginError(text) {
-
-    document
-        .getElementById(
-            "loginError"
-        )
-        .textContent =
-            text || "";
-
-}
-
+/* =========================
+   HELPERS
+========================= */
 
 function escapeHtml(value) {
 
@@ -1679,33 +1297,29 @@ function escapeHtml(value) {
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
-
 }
 
 
-/* =====================================================
-   ENTER
-===================================================== */
+function escapeJs(value) {
 
-document
-    .getElementById("messageInput")
-    .addEventListener(
-        "keydown",
-        event => {
+    return String(value)
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'");
+}
 
-            if (
-                event.key === "Enter" &&
-                !event.shiftKey
-            ) {
 
-                event.preventDefault();
+/* =========================
+   START
+========================= */
 
-                sendMessage();
+window.addEventListener(
+    "load",
+    () => {
 
-            }
+        initGoogle();
 
-        }
-    );
+    }
+);
 
 </script>
 
