@@ -1,1007 +1,1466 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiteLLM AI Workspace</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0284c7',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            900: '#0c4a6e',
-                        },
-                        darkbg: '#0b0f17',
-                        cardbg: '#111827',
-                        sidebarbg: '#0f172a'
-                    }
-                }
-            }
-        }
-    </script>
 
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Marked.js for Markdown Rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <title>REMO AI</title>
 
-    <!-- Highlight.js for Code Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <style>
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.6);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+        * {
+            box-sizing: border-box;
         }
 
-        .prose pre {
-            background-color: #1e293b !important;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            position: relative;
-            margin-top: 0.75rem;
-            margin-bottom: 0.75rem;
-            direction: ltr;
-            text-align: left;
-        }
-        .prose code {
-            font-family: monospace;
-            color: #38bdf8;
-        }
-        .prose p {
-            margin-bottom: 0.75rem;
-            line-height: 1.7;
-        }
-        .prose ul {
-            list-style-type: disc;/
-            padding-right: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .prose ol {
-            list-style-type: decimal;
-            padding-right: 1.5rem;
-            margin-bottom: 0.75rem;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top right, #263b70 0%, transparent 35%),
+                radial-gradient(circle at bottom left, #173d4a 0%, transparent 35%),
+                #080b14;
+            color: white;
+            min-height: 100vh;
         }
 
-        .typing-cursor::after {
-            content: '▋';
-            display: inline-block;
-            animation: blink 1s infinite;
-            margin-right: 2px;
-            color: #38bdf8;
+        button,
+        input,
+        textarea {
+            font: inherit;
         }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(255,255,255,.06);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.35);
+            text-align: center;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6d5dfc, #00c6ff);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+        }
+
+        .muted {
+            color: #9ba4b5;
+        }
+
+        #googleButton {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app {
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            background: rgba(8,11,20,.82);
+            backdrop-filter: blur(20px);
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .role {
+            font-size: 12px;
+            color: #9ba4b5;
+        }
+
+        .quota {
+            padding: 8px 14px;
+            border-radius: 12px;
+            background: rgba(0,198,255,.10);
+            border: 1px solid rgba(0,198,255,.2);
+        }
+
+        .quota strong {
+            color: #00c6ff;
+        }
+
+        .logout {
+            border: 0;
+            background: rgba(255,255,255,.08);
+            color: white;
+            padding: 9px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .logout:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 330px;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,.055);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 20px;
+            padding: 22px;
+            backdrop-filter: blur(15px);
+        }
+
+        .chat {
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            flex: 1;
+            min-height: 350px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .message.me {
+            margin-right: auto;
+            background: linear-gradient(135deg, #5b4df6, #3478f6);
+        }
+
+        .message.other {
+            margin-left: auto;
+            background: rgba(255,255,255,.09);
+        }
+
+        .message-meta {
+            font-size: 11px;
+            opacity: .6;
+            margin-top: 5px;
+        }
+
+        .composer {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .composer textarea {
+            flex: 1;
+            resize: none;
+            min-height: 55px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(0,0,0,.2);
+            color: white;
+            border-radius: 14px;
+            padding: 15px;
+            outline: none;
+        }
+
+        .send {
+            border: 0;
+            border-radius: 14px;
+            padding: 0 22px;
+            background: linear-gradient(135deg,#6d5dfc,#00aaff);
+            color: white;
+            cursor: pointer;
+        }
+
+        .send:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+        }
+
+        .admin-panel h3 {
+            margin-top: 0;
+        }
+
+        .admin-user {
+            padding: 13px;
+            border-radius: 13px;
+            background: rgba(255,255,255,.05);
+            margin-bottom: 10px;
+        }
+
+        .admin-user small {
+            color: #9ba4b5;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 7px;
+            margin-top: 10px;
+        }
+
+        .admin-actions input {
+            width: 80px;
+            background: rgba(0,0,0,.25);
+            color: white;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 8px;
+            padding: 7px;
+        }
+
+        .admin-actions button {
+            border: 0;
+            border-radius: 8px;
+            padding: 7px 10px;
+            cursor: pointer;
+            color: white;
+            background: #3457d5;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #1d2435;
+            border: 1px solid rgba(255,255,255,.12);
+            box-shadow: 0 15px 40px rgba(0,0,0,.3);
+            z-index: 100;
+        }
+
+        .error {
+            color: #ff7272;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 800px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar-inner {
+                flex-wrap: wrap;
+            }
+
+            .quota {
+                order: 3;
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body class="bg-darkbg text-slate-100 font-sans antialiased h-screen flex overflow-hidden">
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="w-72 bg-sidebarbg border-l border-slate-800 flex flex-col flex-shrink-0 transition-all duration-300 z-30 absolute md:relative h-full -right-72 md:right-0">
-        <!-- Sidebar Header -->
-        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-sky-600 flex items-center justify-center font-bold text-white shadow-lg shadow-sky-500/20">
-                    <i class="fa-solid fa-robot text-lg"></i>
-                </div>
+<body>
+
+<section id="loginPage" class="login-page">
+
+    <div class="login-box">
+
+        <div class="logo">R</div>
+
+        <h1>REMO AI</h1>
+
+        <p class="muted">
+            سجل الدخول باستخدام حساب Google
+        </p>
+
+        <div id="googleButton"></div>
+
+        <div id="loginError" class="error"></div>
+
+    </div>
+
+</section>
+
+
+<div id="app" class="app hidden">
+
+    <header class="topbar">
+
+        <div class="topbar-inner">
+
+            <div class="user-info">
+
+                <img id="avatar"
+                     class="avatar"
+                     src=""
+                     alt="avatar">
+
                 <div>
-                    <h1 class="font-bold text-sm text-slate-100">LiteLLM Studio</h1>
-                    <p class="text-xs text-slate-400">واجهة الذكاء الاصطناعي</p>
+                    <div id="userName" class="user-name"></div>
+                    <div id="userRole" class="role"></div>
                 </div>
-            </div>
-            <button id="closeSidebarMobile" class="md:hidden text-slate-400 hover:text-white p-1">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
 
-        <!-- New Chat Button -->
-        <div class="p-3">
-            <button id="newChatBtn" class="w-full bg-sky-600 hover:bg-sky-500 text-white rounded-xl py-2.5 px-4 flex items-center justify-center gap-2 font-medium transition shadow-sm hover:shadow-sky-500/20 active:scale-[0.98]">
-                <i class="fa-solid fa-plus text-sm"></i>
-                <span>محادثة جديدة</span>
-            </button>
-        </div>
-
-        <!-- History List -->
-        <div class="flex-1 overflow-y-auto px-3 py-2 space-y-1" id="historyList">
-            <!-- Dynamic History Items -->
-        </div>
-
-        <!-- Sidebar Footer -->
-        <div class="p-3 border-t border-slate-800 space-y-2">
-            <button id="openSettingsBtn" class="w-full text-slate-300 hover:bg-slate-800/80 rounded-lg p-2.5 flex items-center gap-3 text-sm transition">
-                <i class="fa-solid fa-gear text-slate-400 w-5"></i>
-                <span>الإعدادات والاتصال</span>
-            </button>
-            <button id="clearHistoryBtn" class="w-full text-rose-400 hover:bg-rose-500/10 rounded-lg p-2.5 flex items-center gap-3 text-sm transition">
-                <i class="fa-solid fa-trash-can w-5"></i>
-                <span>مسح كل المحادثات</span>
-            </button>
-        </div>
-    </aside>
-
-    <!-- Sidebar Overlay for Mobile -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"></div>
-
-    <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col h-full min-w-0 bg-darkbg relative">
-        
-        <!-- Header Bar -->
-        <header class="h-16 border-b border-slate-800 bg-cardbg/80 backdrop-blur px-4 flex items-center justify-between z-10">
-            <div class="flex items-center gap-3">
-                <button id="openSidebarMobile" class="md:hidden text-slate-400 hover:text-white p-2">
-                    <i class="fa-solid fa-bars text-lg"></i>
-                </button>
-                
-                <!-- Server Connection Status -->
-        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700/60">
-            <span id="statusPing" class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
-            <span id="statusText" class="text-xs font-medium text-slate-300">جاري الاتصال...</span>
-            <button id="testConnBtn" onclick="diagnoseConnection()" class="text-[10px] bg-slate-700 hover:bg-slate-600 text-slate-200 px-2 py-0.5 rounded transition mr-1">
-                <i class="fa-solid fa-stethoscope ml-1"></i>فحص
-            </button>
-        </div>
             </div>
 
-            <!-- Model Selector Dropdown -->
-            <div class="flex items-center gap-2">
-                <label for="modelSelect" class="text-xs text-slate-400 hidden sm:inline"><i class="fa-solid fa-microchip ml-1"></i>الموديل:</label>
-                <select id="modelSelect" class="bg-slate-800 text-slate-200 text-xs sm:text-sm rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-sky-500 transition max-w-[180px] sm:max-w-[240px]">
-                    <option value="remo">remo (افتراضي)</option>
-                    <option value="llama3">llama3</option>
-                </select>
-                <button id="refreshModelsBtn" title="تحديث قائمة الموديلات" class="p-2 text-slate-400 hover:text-sky-400 rounded-lg transition">
-                    <i class="fa-solid fa-arrows-rotate text-sm"></i>
-                </button>
+            <div class="quota">
+                المتبقي:
+                <strong id="quota">700</strong>
             </div>
-        </header>
 
-        <!-- Messages Container -->
-        <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-4xl mx-auto w-full">
-            <!-- Dynamic Messages rendered here -->
-            
-            <!-- Welcome View (Default state) -->
-            <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center p-6 space-y-6">
-                <div class="w-16 h-16 rounded-2xl bg-sky-600/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-3xl shadow-xl">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-                <div class="max-w-md space-y-2">
-                    <h2 class="text-2xl font-bold text-white">مرحباً بك في LiteLLM Workspace</h2>
-                    <p class="text-slate-400 text-sm">واجهتك الذكية المتصلة مباشرة بـ Ollama / LiteLLM Backend الخاصة بك. ابدأ كتابة رسالة أدناه لبدء المحادثة.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg pt-4 text-right">
-                    <button class="quick-prompt p-3 rounded-xl bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800 hover:border-sky-500/50 text-xs text-slate-300 transition text-right">
-                        <span class="font-bold text-sky-400 block mb-1">💻 برمجة</span>
-                        اكتب كود Python لإنشاء سيرفر FastAPI بسيط
-                    </button>
-                    <button class="quick-prompt p-3 rounded-xl bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800 hover:border-sky-500/50 text-xs text-slate-300 transition text-right">
-                        <span class="font-bold text-sky-400 block mb-1">💡 تلخيص ومساعدة</span>
-                        ما هي أفضل الممارسات لتحسين أداء برامج الذكاء الاصطناعي؟
-                    </button>
-                </div>
-            </div>
+            <button
+                id="logoutButton"
+                class="logout"
+                onclick="logout()">
+                خروج
+            </button>
+
         </div>
 
-        <!-- Input Box Section -->
-        <div class="p-3 sm:p-4 border-t border-slate-800 bg-cardbg/50 backdrop-blur">
-            <div class="max-w-4xl mx-auto relative">
-                <form id="chatForm" class="flex items-end gap-2 bg-slate-800/90 border border-slate-700 focus-within:border-sky-500 rounded-2xl p-2 transition shadow-lg">
-                    <textarea 
-                        id="userPrompt" 
-                        rows="1" 
-                        placeholder="اكتب رسالتك هنا... (Shift + Enter لسطر جديد)"
-                        class="w-full bg-transparent text-slate-100 placeholder-slate-400 text-sm px-3 py-2 resize-none focus:outline-none max-h-36 overflow-y-auto"
+    </header>
+
+
+    <main class="container">
+
+        <div class="grid">
+
+            <section class="card chat">
+
+                <h2>محادثة REMO</h2>
+
+                <div
+                    id="messages"
+                    class="messages">
+                </div>
+
+                <div class="composer">
+
+                    <textarea
+                        id="messageInput"
+                        placeholder="اكتب رسالتك..."
                     ></textarea>
-                    
-                    <button 
-                        type="submit" 
-                        id="sendBtn"
-                        class="bg-sky-600 hover:bg-sky-500 disabled:bg-slate-700 text-white w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition active:scale-95 shadow-md shadow-sky-500/20"
-                    >
-                        <i class="fa-solid fa-paper-plane text-sm"></i>
+
+                    <button
+                        id="sendButton"
+                        class="send"
+                        onclick="sendMessage()">
+                        إرسال
                     </button>
-                    <button 
-                        type="button" 
-                        id="stopBtn"
-                        class="hidden bg-rose-600 hover:bg-rose-500 text-white w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition active:scale-95 shadow-md shadow-rose-500/20"
-                        title="إيقاف التوليد"
-                    >
-                        <i class="fa-solid fa-stop text-sm"></i>
-                    </button>
-                </form>
-                <div class="flex justify-between items-center px-2 mt-2 text-[11px] text-slate-500">
-                    <span>متصل بـ: <code id="displayBackendUrl" class="text-slate-400">trycloudflare.com</code></span>
-                    <span>LiteLLM OpenAI Compatible API</span>
+
                 </div>
-            </div>
+
+            </section>
+
+
+            <aside
+                id="adminPanel"
+                class="card admin-panel hidden">
+
+                <h3>لوحة الأدمن</h3>
+
+                <p class="muted">
+                    المستخدمون
+                </p>
+
+                <div id="usersList"></div>
+
+            </aside>
+
         </div>
+
     </main>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-cardbg border border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <h3 class="font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-sky-400"></i>
-                    إعدادات الاتصال والنموذج
-                </h3>
-                <button id="closeSettingsBtn" class="text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            
-            <div class="p-5 space-y-4 text-sm">
-                <!-- Backend URL -->
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">رابط الباك إند (Backend URL)</label>
-                    <div class="flex gap-2">
-                        <input 
-                            type="url" 
-                            id="backendUrlInput" 
-                            value="https://possibility-quad-yacht-alone.trycloudflare.com"
-                            class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-sky-500 text-xs font-mono"
-                            placeholder="https://your-domain.trycloudflare.com"
-                        >
-                        <a id="openBackendDirectBtn" href="https://possibility-quad-yacht-alone.trycloudflare.com" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white px-3 py-2 rounded-lg text-xs flex items-center gap-1 font-medium transition" title="فتح الرابط في تبويب جديد لتخطي تحذير Cloudflare">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            <span>فتح</span>
-                        </a>
-                    </div>
-                    <p class="text-[11px] text-amber-400 mt-1"><i class="fa-solid fa-triangle-exclamation ml-1"></i>إذا ظهر خطأ، اضغط "فتح" واقبل صفحة Cloudflare أولاً ثم أعد التجربة.</p>
-                </div>
+</div>
 
-                <!-- API Key -->
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">مفتاح API (اخيلاري)</label>
-                    <input 
-                        type="password" 
-                        id="apiKeyInput" 
-                        placeholder="sk-..."
-                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-sky-500 text-xs font-mono"
-                    >
-                </div>
 
-                <!-- System Prompt -->
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">التعليمات الأساسية (System Prompt)</label>
-                    <textarea 
-                        id="systemPromptInput" 
-                        rows="2"
-                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-sky-500 text-xs resize-none"
-                        placeholder="انت مساعد ذكي ومفيد يجيب باللغة العربية بكفاءة."
-                    >انت مساعد ذكي ومفيد يجيب باللغة العربية بكفاءة عالية وبأسلوب منظم.</textarea>
-                </div>
+<div
+    id="notification"
+    class="notification hidden">
+</div>
 
-                <!-- Temperature Slider -->
-                <div>
-                    <div class="flex justify-between text-xs mb-1">
-                        <span class="text-slate-300">درجة الإبداع (Temperature):</span>
-                        <span id="tempValue" class="text-sky-400 font-bold">0.7</span>
-                    </div>
-                    <input type="range" id="tempInput" min="0" max="1" step="0.1" value="0.7" class="w-full accent-sky-500 bg-slate-800">
-                </div>
 
-                <!-- Stream Toggle -->
-                <div class="flex items-center justify-between py-1">
-                    <span class="text-slate-300">تفعيل البث المباشر (Stream Response)</span>
-                    <input type="checkbox" id="streamToggle" checked class="w-4 h-4 accent-sky-500 rounded cursor-pointer">
-                </div>
-            </div>
+<script>
 
-            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end gap-2">
-                <button id="saveSettingsBtn" class="bg-sky-600 hover:bg-sky-500 text-white rounded-lg px-4 py-2 font-medium text-xs transition">
-                    حفظ التغييرات
-                </button>
-            </div>
-        </div>
-    </div>
+/* =========================================================
+   CONFIG
+========================================================= */
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-slate-800 text-slate-200 px-4 py-2 rounded-xl border border-slate-700 text-xs shadow-xl hidden transition duration-300 z-50 flex items-center gap-2">
-        <i id="toastIcon" class="fa-solid fa-info-circle text-sky-400"></i>
-        <span id="toastMsg">تم التحديث بنجاح</span>
-    </div>
+/*
+ * Google Client ID
+ */
+const GOOGLE_CLIENT_ID =
+    "610561621500-4fk159dv20phoqb3qj90uc0kqsb9tb1i.apps.googleusercontent.com";
 
-    <script>
-        // Default Configuration & Application State
-        const CONFIG_KEY = 'litellm_app_config_v1';
-        const HISTORY_KEY = 'litellm_chat_history_v1';
 
-        let appState = {
-            backendUrl: 'https://possibility-quad-yacht-alone.trycloudflare.com',
-            apiKey: '',
-            systemPrompt: 'انت مساعد ذكي ومفيد يجيب باللغة العربية بكفاءة عالية وبأسلوب منظم.',
-            temperature: 0.7,
-            stream: true,
-            selectedModel: 'remo',
-            activeChatId: null,
-            chats: [],
-            isGenerating: false,
-            abortController: null
-        };
+/*
+ * PHP Backend
+ */
+const API_URL =
+    "https://ballet-traveller-christmas-monitors.trycloudflare.com/api.php";
 
-        // DOM Element Cache
-        const elements = {
-            messagesContainer: document.getElementById('messagesContainer'),
-            welcomeScreen: document.getElementById('welcomeScreen'),
-            userPrompt: document.getElementById('userPrompt'),
-            chatForm: document.getElementById('chatForm'),
-            sendBtn: document.getElementById('sendBtn'),
-            stopBtn: document.getElementById('stopBtn'),
-            modelSelect: document.getElementById('modelSelect'),
-            refreshModelsBtn: document.getElementById('refreshModelsBtn'),
-            statusPing: document.getElementById('statusPing'),
-            statusText: document.getElementById('statusText'),
-            displayBackendUrl: document.getElementById('displayBackendUrl'),
-            historyList: document.getElementById('historyList'),
-            newChatBtn: document.getElementById('newChatBtn'),
-            clearHistoryBtn: document.getElementById('clearHistoryBtn'),
-            
-            // Mobile Sidebar
-            sidebar: document.getElementById('sidebar'),
-            sidebarOverlay: document.getElementById('sidebarOverlay'),
-            openSidebarMobile: document.getElementById('openSidebarMobile'),
-            closeSidebarMobile: document.getElementById('closeSidebarMobile'),
 
-            // Settings Modal
-            settingsModal: document.getElementById('settingsModal'),
-            openSettingsBtn: document.getElementById('openSettingsBtn'),
-            closeSettingsBtn: document.getElementById('closeSettingsBtn'),
-            saveSettingsBtn: document.getElementById('saveSettingsBtn'),
-            backendUrlInput: document.getElementById('backendUrlInput'),
-            apiKeyInput: document.getElementById('apiKeyInput'),
-            systemPromptInput: document.getElementById('systemPromptInput'),
-            tempInput: document.getElementById('tempInput'),
-            tempValue: document.getElementById('tempValue'),
-            streamToggle: document.getElementById('streamToggle'),
+/*
+ * Admin
+ */
+const ADMIN_EMAIL =
+    "adamitm960@gmail.com";
 
-            // Toast
-            toast: document.getElementById('toast'),
-            toastMsg: document.getElementById('toastMsg')
-        };
 
-        // Load saved state on boot
-        function initApp() {
-            // Load saved settings
-            const savedConfig = localStorage.getItem(CONFIG_KEY);
-            if (savedConfig) {
-                try {
-                    const parsed = JSON.parse(savedConfig);
-                    appState = { ...appState, ...parsed };
-                } catch(e) { console.error('Error loading config:', e); }
-            }
+/*
+ * Guest quota
+ */
+const DEFAULT_QUOTA = 700;
 
-            // Load saved chat history
-            const savedChats = localStorage.getItem(HISTORY_KEY);
-            if (savedChats) {
-                try {
-                    appState.chats = JSON.parse(savedChats);
-                } catch(e) { console.error('Error loading history:', e); }
-            }
 
-            // Sync Settings Form UI
-            elements.backendUrlInput.value = appState.backendUrl;
-            elements.apiKeyInput.value = appState.apiKey || '';
-            elements.systemPromptInput.value = appState.systemPrompt;
-            elements.tempInput.value = appState.temperature;
-            elements.tempValue.textContent = appState.temperature;
-            elements.streamToggle.checked = appState.stream;
-            
-            updateUrlDisplay();
-            renderHistoryList();
-            
-            // Check Server & Load Models
-            checkBackendConnection();
-            
-            // Setup Event Listeners
-            setupEventListeners();
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+let messagesTimer = null;
+
+
+/* =========================================================
+   GOOGLE LOGIN
+========================================================= */
+
+window.addEventListener("load", function () {
+
+    if (
+        typeof google === "undefined" ||
+        !google.accounts ||
+        !google.accounts.id
+    ) {
+        showLoginError(
+            "Google Login لم يتم تحميله. تأكد من الإنترنت."
+        );
+
+        return;
+    }
+
+
+    google.accounts.id.initialize({
+
+        client_id:
+            GOOGLE_CLIENT_ID,
+
+        callback:
+            handleGoogleLogin,
+
+        auto_select:
+            false,
+
+        cancel_on_tap_outside:
+            true
+
+    });
+
+
+    google.accounts.id.renderButton(
+
+        document.getElementById(
+            "googleButton"
+        ),
+
+        {
+            theme:
+                "filled_black",
+
+            size:
+                "large",
+
+            shape:
+                "pill",
+
+            width:
+                300
         }
 
-        function updateUrlDisplay() {
-            try {
-                const url = new URL(appState.backendUrl);
-                elements.displayBackendUrl.textContent = url.hostname;
-            } catch {
-                elements.displayBackendUrl.textContent = appState.backendUrl;
-            }
+    );
+
+});
+
+
+/* =========================================================
+   GOOGLE CALLBACK
+========================================================= */
+
+async function handleGoogleLogin(response) {
+
+    try {
+
+        showLoginError("");
+
+
+        if (
+            !response ||
+            !response.credential
+        ) {
+
+            throw new Error(
+                "Google لم يرجع بيانات تسجيل الدخول."
+            );
+
         }
 
-        function saveConfigToStorage() {
-            const dataToSave = {
-                backendUrl: appState.backendUrl,
-                apiKey: appState.apiKey,
-                systemPrompt: appState.systemPrompt,
-                temperature: appState.temperature,
-                stream: appState.stream,
-                selectedModel: appState.selectedModel
-            };
-            localStorage.setItem(CONFIG_KEY, JSON.stringify(dataToSave));
-        }
 
-        function saveChatsToStorage() {
-            localStorage.setItem(HISTORY_KEY, JSON.stringify(appState.chats));
-        }
-
-        // Test backend connectivity and fetch models list from /v1/models
-        async function checkBackendConnection() {
-            elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse';
-            elements.statusText.textContent = 'جاري التحقق...';
-
-            let cleanBaseUrl = appState.backendUrl.replace(/\/+$/, '');
-            const modelsEndpoint = `${cleanBaseUrl}/v1/models`;
-
-            const headers = {
-                'bypass-tunnel-reminder': 'true',
-                'ngrok-skip-browser-warning': 'true'
-            };
-            if (appState.apiKey) {
-                headers['Authorization'] = `Bearer ${appState.apiKey}`;
-            }
-
-            try {
-                const response = await fetch(modelsEndpoint, { method: 'GET', headers });
-                
-                const contentType = response.headers.get('content-type') || '';
-                if (contentType.includes('text/html')) {
-                    throw new Error('CLOUDFLARE_INTERSTITIAL');
+        const result =
+            await apiRequest(
+                "login",
+                {
+                    credential:
+                        response.credential
                 }
+            );
 
-                if (response.ok) {
-                    const data = await response.json();
-                    elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
-                    elements.statusText.textContent = 'متصل بـ LiteLLM';
-                    
-                    if (data && data.data && Array.isArray(data.data) && data.data.length > 0) {
-                        populateModelSelect(data.data.map(m => m.id));
-                    }
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-            } catch (err) {
-                console.warn('Could not fetch models automatically:', err);
-                elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-rose-500'; 
-                if (err.message === 'CLOUDFLARE_INTERSTITIAL') {
-                    elements.statusText.textContent = 'يتطلب قبول Cloudflare';
-                } else {
-                    elements.statusText.textContent = 'خطأ في الاتصال (CORS / Tunnel)';
-                }
-            }
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "فشل تسجيل الدخول"
+            );
+
         }
 
-        async function diagnoseConnection() {
-            let cleanBaseUrl = appState.backendUrl.replace(/\/+$/, '');
-            showToast('جاري فحص الاتصال بالباك إند...', false);
 
-            try {
-                const res = await fetch(`${cleanBaseUrl}/v1/models`, {
-                    headers: {
-                        'bypass-tunnel-reminder': 'true',
-                        'ngrok-skip-browser-warning': 'true',
-                        ...(appState.apiKey ? { 'Authorization': `Bearer ${appState.apiKey}` } : {})
-                    }
-                });
+        currentUser =
+            result.user;
 
-                const text = await res.text();
-                if (text.includes('<!DOCTYPE html>') || text.includes('Cloudflare')) {
-                    alert('⚠️ خطأ Cloudflare Interstitial:\n\nرابط Cloudflare يحتاج لتأكيد من المتصفح أولاً.\nاضغط على زر "فتح" بجانب الرابط في الإعدادات، واضغط "Visit Site" أو "Continue"، ثم عد إلى هنا واضغط فحص.');
+
+        showApp();
+
+
+        await loadMessages();
+
+
+        if (
+            currentUser.role ===
+            "admin"
+        ) {
+
+            await loadUsers();
+
+        }
+
+
+        startPolling();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        showLoginError(
+            error.message ||
+            "حدث خطأ أثناء تسجيل الدخول"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   API
+========================================================= */
+
+async function apiRequest(
+    action,
+    data = {}
+) {
+
+    const response =
+        await fetch(
+            API_URL,
+            {
+                method:
+                    "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify({
+                        action:
+                            action,
+
+                        ...data
+                    })
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Backend HTTP Error: " +
+            response.status
+        );
+
+    }
+
+
+    return await response.json();
+
+}
+
+
+/* =========================================================
+   SHOW APP
+========================================================= */
+
+function showApp() {
+
+    document
+        .getElementById("loginPage")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("userName")
+        .textContent =
+            currentUser.name;
+
+
+    document
+        .getElementById("userRole")
+        .textContent =
+            currentUser.role === "admin"
+                ? "Administrator"
+                : "Guest";
+
+
+    const avatar =
+        document.getElementById(
+            "avatar"
+        );
+
+
+    if (currentUser.picture) {
+
+        avatar.src =
+            currentUser.picture;
+
+    }
+
+
+    if (
+        currentUser.role ===
+        "admin"
+    ) {
+
+        document
+            .getElementById("adminPanel")
+            .classList.remove("hidden");
+
+
+        document
+            .getElementById("quota")
+            .textContent =
+                "∞";
+
+    } else {
+
+        updateQuota(
+            currentUser.quota
+        );
+
+    }
+
+
+    updateButtons();
+
+}
+
+
+/* =========================================================
+   QUOTA
+========================================================= */
+
+function updateQuota(quota) {
+
+    currentUser.quota =
+        Number(quota);
+
+
+    document
+        .getElementById("quota")
+        .textContent =
+            currentUser.quota;
+
+
+    updateButtons();
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+function updateButtons() {
+
+    const sendButton =
+        document.getElementById(
+            "sendButton"
+        );
+
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
+    const logoutButton =
+        document.getElementById(
+            "logoutButton"
+        );
+
+
+    if (
+        currentUser.role ===
+        "admin"
+    ) {
+
+        sendButton.disabled =
+            false;
+
+        input.disabled =
+            false;
+
+        logoutButton.disabled =
+            false;
+
+        input.placeholder =
+            "اكتب رسالتك...";
+
+        return;
+
+    }
+
+
+    if (
+        Number(currentUser.quota) <= 0
+    ) {
+
+        sendButton.disabled =
+            true;
+
+        input.disabled =
+            true;
+
+        logoutButton.disabled =
+            true;
+
+        input.placeholder =
+            "انتهى رصيد الرسائل";
+
+    } else {
+
+        sendButton.disabled =
+            false;
+
+        input.disabled =
+            false;
+
+        logoutButton.disabled =
+            false;
+
+        input.placeholder =
+            "اكتب رسالتك...";
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    if (
+        currentUser.role !== "admin" &&
+        Number(currentUser.quota) <= 0
+    ) {
+
+        showNotification(
+            "انتهى رصيد الرسائل"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                "send_message",
+                {
+                    email:
+                        currentUser.email,
+
+                    message:
+                        text
+                }
+            );
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "فشل إرسال الرسالة"
+            );
+
+        }
+
+
+        input.value = "";
+
+
+        if (
+            currentUser.role !==
+            "admin"
+        ) {
+
+            updateQuota(
+                result.remaining
+            );
+
+        }
+
+
+        await loadMessages();
+
+
+    } catch (error) {
+
+        showNotification(
+            error.message
+        );
+
+    }
+
+
+    updateButtons();
+
+}
+
+
+/* =========================================================
+   LOAD MESSAGES
+========================================================= */
+
+async function loadMessages() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                "get_messages",
+                {
+                    email:
+                        currentUser.email
+                }
+            );
+
+
+        if (!result.success) {
+            return;
+        }
+
+
+        renderMessages(
+            result.messages || []
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER MESSAGES
+========================================================= */
+
+function renderMessages(messages) {
+
+    const container =
+        document.getElementById(
+            "messages"
+        );
+
+
+    container.innerHTML = "";
+
+
+    messages.forEach(
+        message => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            const isMe =
+                message.sender_email ===
+                currentUser.email;
+
+
+            div.className =
+                "message " +
+                (
+                    isMe
+                        ? "me"
+                        : "other"
+                );
+
+
+            const text =
+                document.createElement(
+                    "div"
+                );
+
+
+            text.textContent =
+                message.message;
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+
+            meta.className =
+                "message-meta";
+
+
+            meta.textContent =
+                (
+                    message.sender_name ||
+                    ""
+                ) +
+                " • " +
+                (
+                    message.created_at ||
+                    ""
+                );
+
+
+            div.appendChild(text);
+
+            div.appendChild(meta);
+
+            container.appendChild(div);
+
+        }
+    );
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+/* =========================================================
+   ADMIN USERS
+========================================================= */
+
+async function loadUsers() {
+
+    if (
+        !currentUser ||
+        currentUser.role !==
+        "admin"
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                "get_users",
+                {
+                    email:
+                        currentUser.email
+                }
+            );
+
+
+        if (!result.success) {
+            return;
+        }
+
+
+        const list =
+            document.getElementById(
+                "usersList"
+            );
+
+
+        list.innerHTML = "";
+
+
+        result.users.forEach(
+            user => {
+
+                if (
+                    user.email.toLowerCase() ===
+                    ADMIN_EMAIL.toLowerCase()
+                ) {
                     return;
                 }
 
-                try {
-                    const json = JSON.parse(text);
-                    if (json.data) {
-                        alert(`✅ الاتصال ناجح 100%!\n\nالموديلات المتاحة:\n` + json.data.map(m => '• ' + m.id).join('\n'));
-                        populateModelSelect(json.data.map(m => m.id));
-                        elements.statusPing.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
-                        elements.statusText.textContent = 'متصل بـ LiteLLM';
-                    } else {
-                        alert('⚠️ السيرفر استجاب لكن لم يرجع قائمة موديلات بصيغة OpenAI standard.\nالاستجابة:\n' + text.substring(0, 300));
-                    }
-                } catch(e) {
-                    alert('⚠️ السيرفر استجاب بنص ليس JSON:\n' + text.substring(0, 300));
-                }
 
-            } catch(err) {
-                alert(`❌ فشل الاتصال برابط الباك إند (Failed to fetch):\n${err.message}\n\nالأسباب والتصحيح:\n1. تأكد من تفعيل CORS في LiteLLM بالمرور براميتر: --cors_origins "*"\n2. تأكد من أن الرابط ${cleanBaseUrl} يعمل ولم يقتصر/يتغير بسبب إعادة تشغيل Cloudflare Tunnel.`);
-            }
-        }
+                const div =
+                    document.createElement(
+                        "div"
+                    );
 
-        function populateModelSelect(models) {
-            elements.modelSelect.innerHTML = '';
-            models.forEach(modelId => {
-                const opt = document.createElement('option');
-                opt.value = modelId;
-                opt.textContent = modelId;
-                if (modelId === appState.selectedModel) opt.selected = true;
-                elements.modelSelect.appendChild(opt);
-            });
-            if (models.length > 0 && !models.includes(appState.selectedModel)) {
-                appState.selectedModel = models[0];
-                saveConfigToStorage();
-            }
-        }
 
-        function showToast(message, isError = false) {
-            elements.toastMsg.textContent = message;
-            elements.toast.querySelector('i').className = isError 
-                ? 'fa-solid fa-triangle-exclamation text-rose-400' 
-                : 'fa-solid fa-circle-check text-emerald-400';
-            elements.toast.classList.remove('hidden');
-            setTimeout(() => {
-                elements.toast.classList.add('hidden');
-            }, 3000);
-        }
+                div.className =
+                    "admin-user";
 
-        function formatMarkdown(text) {
-            if (typeof marked !== 'undefined') {
-                marked.setOptions({
-                    highlight: function(code, lang) {
-                        if (lang && hljs.getLanguage(lang)) {
-                            return hljs.highlight(code, { language: lang }).value;
-                        }
-                        return hljs.highlightAuto(code).value;
-                    },
-                    breaks: true
-                });
-                return marked.parse(text);
-            }
-            return text.replace(/\n/g, '<br>');
-        }
 
-        function renderMessages() {
-            elements.messagesContainer.innerHTML = '';
+                div.innerHTML = `
+                    <strong>
+                        ${escapeHtml(user.name)}
+                    </strong>
 
-            const currentChat = appState.chats.find(c => c.id === appState.activeChatId);
-            if (!currentChat || currentChat.messages.length === 0) {
-                elements.welcomeScreen.classList.remove('hidden');
-                elements.messagesContainer.appendChild(elements.welcomeScreen);
-                return;
-            }
+                    <br>
 
-            elements.welcomeScreen.classList.add('hidden');
+                    <small>
+                        ${escapeHtml(user.email)}
+                    </small>
 
-            currentChat.messages.forEach(msg => {
-                appendMessageToUI(msg.role, msg.content, false);
-            });
+                    <br>
 
-            scrollToBottom();
-        }
+                    <small>
+                        المتبقي:
+                        <b>
+                            ${Number(user.quota || 0)}
+                        </b>
+                    </small>
 
-        function appendMessageToUI(role, content = '', isStreaming = false) {
-            elements.welcomeScreen.classList.add('hidden');
-            
-            const isUser = role === 'user';
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `flex gap-3 sm:gap-4 ${isUser ? 'justify-end' : 'justify-start'} animate-in fade-in duration-200`;
+                    <div class="admin-actions">
 
-            const avatar = isUser
-                ? `<div class="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0"><i class="fa-solid fa-user"></i></div>`
-                : `<div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0"><i class="fa-solid fa-robot"></i></div>`;
+                        <input
+                            type="number"
+                            min="1"
+                            value="100"
+                            id="quota_${escapeAttr(user.email)}"
+                        >
 
-            const contentClass = isUser
-                ? 'bg-sky-600/90 text-white rounded-2xl rounded-tr-none px-4 py-3 text-sm max-w-[85%] sm:max-w-[75%] shadow-md'
-                : 'bg-cardbg border border-slate-800 text-slate-100 rounded-2xl rounded-tl-none px-4 py-3 text-sm max-w-[90%] sm:max-w-[85%] prose prose-invert shadow-md';
+                        <button
+                            onclick="addQuota('${escapeJs(user.email)}')">
+                            + إضافة
+                        </button>
 
-            const copyBtnHtml = !isUser ? `
-                <div class="mt-2 pt-2 border-t border-slate-800/80 flex justify-end gap-2 text-xs text-slate-400">
-                    <button onclick="copyToClipboard(this)" class="hover:text-sky-400 transition flex items-center gap-1">
-                        <i class="fa-regular fa-copy"></i>
-                        <span>نسخ</span>
-                    </button>
-                </div>
-            ` : '';
-
-            msgDiv.innerHTML = isUser ? `
-                <div class="${contentClass}">
-                    <div class="whitespace-pre-wrap">${escapeHtml(content)}</div>
-                </div>
-                ${avatar}
-            ` : `
-                ${avatar}
-                <div class="${contentClass}">
-                    <div class="message-content ${isStreaming ? 'typing-cursor' : ''}">${formatMarkdown(content)}</div>
-                    ${copyBtnHtml}
-                </div>
-            `;
-
-            elements.messagesContainer.appendChild(msgDiv);
-            scrollToBottom();
-
-            // Highlight newly added code blocks
-            msgDiv.querySelectorAll('pre code').forEach((block) => {
-                if (window.hljs) hljs.highlightElement(block);
-            });
-
-            return msgDiv.querySelector('.message-content');
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function scrollToBottom() {
-            elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
-        }
-
-        async function handleSendMessage(e) {
-            if (e) e.preventDefault();
-
-            const prompt = elements.userPrompt.value.trim();
-            if (!prompt || appState.isGenerating) return;
-
-            // Ensure we have an active chat session
-            if (!appState.activeChatId) {
-                createNewChat();
-            }
-
-            const currentChat = appState.chats.find(c => c.id === appState.activeChatId);
-            if (!currentChat) return;
-
-            // Add user message to state
-            currentChat.messages.push({ role: 'user', content: prompt });
-            if (currentChat.title === 'محادثة جديدة') {
-                currentChat.title = prompt.substring(0, 30) + (prompt.length > 30 ? '...' : '');
-                renderHistoryList();
-            }
-
-            elements.userPrompt.value = '';
-            elements.userPrompt.style.height = 'auto';
-
-            // Render User Message
-            appendMessageToUI('user', prompt);
-
-            // Set state to generating
-            appState.isGenerating = true;
-            toggleGeneratingState(true);
-
-            // Prepare API Request Payload
-            let cleanBaseUrl = appState.backendUrl.replace(/\/+$/, '');
-            const chatEndpoint = `${cleanBaseUrl}/v1/chat/completions`;
-
-            const requestMessages = [
-                { role: 'system', content: appState.systemPrompt },
-                ...currentChat.messages
-            ];
-
-            const payload = {
-                model: appState.selectedModel,
-                messages: requestMessages,
-                temperature: parseFloat(appState.temperature),
-                stream: appState.stream
-            };
-
-            const headers = {
-                'Content-Type': 'application/json',
-                'bypass-tunnel-reminder': 'true',
-                'ngrok-skip-browser-warning': 'true'
-            };
-            if (appState.apiKey) {
-                headers['Authorization'] = `Bearer ${appState.apiKey}`;
-            }
-
-            appState.abortController = new AbortController();
-
-            // AI Response Container
-            const responseElement = appendMessageToUI('assistant', '', true);
-            let fullAiResponse = '';
-
-            try {
-                if (appState.stream) {
-                    // Streaming Response
-                    const response = await fetch(chatEndpoint, {
-                        method: 'POST',
-                        headers,
-                        body: JSON.stringify(payload),
-                        signal: appState.abortController.signal
-                    });
-
-                    if (!response.ok) {
-                        const errData = await response.text();
-                        throw new Error(`خطأ من السيرفر (${response.status}): ${errData}`);
-                    }
-
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder('utf-8');
-
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-
-                        const chunk = decoder.decode(value, { stream: true });
-                        const lines = chunk.split('\n').filter(line => line.trim() !== '');
-
-                        for (const line of lines) {
-                            if (line.startsWith('data: ')) {
-                                const dataStr = line.replace('data: ', '').trim();
-                                if (dataStr === '[DONE]') break;
-
-                                try {
-                                    const json = JSON.parse(dataStr);
-                                    const delta = json.choices[0]?.delta?.content || '';
-                                    fullAiResponse += delta;
-                                    responseElement.innerHTML = formatMarkdown(fullAiResponse);
-                                    scrollToBottom();
-                                } catch (e) {
-                                    // Skip unparseable JSON stream chunks
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    // Non-streaming fetch
-                    const response = await fetch(chatEndpoint, {
-                        method: 'POST',
-                        headers,
-                        body: JSON.stringify(payload),
-                        signal: appState.abortController.signal
-                    });
-
-                    if (!response.ok) {
-                        const errData = await response.text();
-                        throw new Error(`خطأ من السيرفر (${response.status}): ${errData}`);
-                    }
-
-                    const data = await response.json();
-                    fullAiResponse = data.choices[0]?.message?.content || 'لم يتم استلام نص متوافق.';
-                    responseElement.innerHTML = formatMarkdown(fullAiResponse);
-                }
-
-                // Finalize response
-                responseElement.classList.remove('typing-cursor');
-                currentChat.messages.push({ role: 'assistant', content: fullAiResponse });
-                saveChatsToStorage();
-
-            } catch (err) {
-                if (err.name === 'AbortError') {
-                    showToast('تم إيقاف التوليد بطلب منك.');
-                    responseElement.innerHTML += '<p class="text-rose-400 text-xs mt-2">[تم إلغاء التوليد]</p>';
-                } else {
-                    console.error('Chat error:', err);
-                    showToast('فشل الاتصال بالباك إند (Failed to Fetch)', true);
-                    
-                    let errorHelp = `<div class="p-3 bg-rose-950/40 border border-rose-500/30 rounded-xl space-y-2 text-rose-200 dir-rtl text-right">
-                        <p class="font-bold text-rose-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation"></i> تعذر الاتصال بالسيرفر (Failed to fetch)</p>
-                        <p class="text-xs text-slate-300">لحل هذه المشكلة، اتبع الخطوات التالية:</p>
-                        <ol class="list-decimal list-inside text-xs space-y-1 text-slate-300">
-                            <li><strong class="text-white">تشغيل LiteLLM بالصيغة الصحيحة:</strong> استخدم الأمر التالي في PowerShell:
-                                <code class="block my-1 p-1.5 bg-slate-900 rounded font-mono text-sky-300 text-[11px] select-all">litellm --model ollama/remo</code>
-                            </li>
-                            <li><strong class="text-white">تأكد من عمل الرابط:</strong> اضغط على <a href="${appState.backendUrl}" target="_blank" class="underline text-sky-400 font-bold">فتح رابط الباك إند</a> لتخطي صفحة تحذير Cloudflare إذا كانت تظهر.</li>
-                            <li><strong class="text-white">تجديد الرابط:</strong> إذا قمت بإعادة تشغيل Cloudflare Tunnel، انسخ الرابط الجديد من الترمينال وضعه في قائمة <strong>الإعدادات والاتصال</strong>.</li>
-                        </ol>
-                    </div>`;
-                    
-                    responseElement.innerHTML = errorHelp;
-                }
-            } finally {
-                responseElement.classList.remove('typing-cursor');
-                appState.isGenerating = false;
-                toggleGeneratingState(false);
-                saveChatsToStorage();
-            }
-        }
-
-        function toggleGeneratingState(isGenerating) {
-            if (isGenerating) {
-                elements.sendBtn.classList.add('hidden');
-                elements.stopBtn.classList.remove('hidden');
-            } else {
-                elements.sendBtn.classList.remove('hidden');
-                elements.stopBtn.classList.add('hidden');
-            }
-        }
-
-        function stopGeneration() {
-            if (appState.abortController) {
-                appState.abortController.abort();
-            }
-        }
-
-        function createNewChat() {
-            const newChat = {
-                id: 'chat_' + Date.now(),
-                title: 'محادثة جديدة',
-                timestamp: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
-                messages: []
-            };
-            appState.chats.unshift(newChat);
-            appState.activeChatId = newChat.id;
-            saveChatsToStorage();
-            renderHistoryList();
-            renderMessages();
-        }
-
-        function selectChat(chatId) {
-            appState.activeChatId = chatId;
-            renderHistoryList();
-            renderMessages();
-            // Close mobile sidebar
-            elements.sidebar.classList.add('-right-72');
-            elements.sidebar.classList.remove('right-0');
-            elements.sidebarOverlay.classList.add('hidden');
-        }
-
-        function deleteChat(chatId, event) {
-            event.stopPropagation();
-            appState.chats = appState.chats.filter(c => c.id !== chatId);
-            if (appState.activeChatId === chatId) {
-                appState.activeChatId = appState.chats.length > 0 ? appState.chats[0].id : null;
-            }
-            saveChatsToStorage();
-            renderHistoryList();
-            renderMessages();
-        }
-
-        function renderHistoryList() {
-            elements.historyList.innerHTML = '';
-            
-            if (appState.chats.length === 0) {
-                elements.historyList.innerHTML = `<div class="text-center py-6 text-xs text-slate-500">لا توجد محادثات سابقة</div>`;
-                return;
-            }
-
-            appState.chats.forEach(chat => {
-                const isActive = chat.id === appState.activeChatId;
-                const item = document.createElement('div');
-                item.className = `group flex items-center justify-between p-2.5 rounded-xl cursor-pointer text-xs transition ${
-                    isActive 
-                        ? 'bg-slate-800 text-sky-400 font-medium border border-slate-700/60' 
-                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-                }`;
-                item.onclick = () => selectChat(chat.id);
-
-                item.innerHTML = `
-                    <div class="flex items-center gap-2.5 truncate">
-                        <i class="fa-regular fa-message text-slate-500 group-hover:text-sky-400"></i>
-                        <span class="truncate">${escapeHtml(chat.title)}</span>
                     </div>
-                    <button onclick="deleteChat('${chat.id}', event)" class="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-1 transition" title="حذف">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
                 `;
-                elements.historyList.appendChild(item);
-            });
-        }
 
-        function copyToClipboard(button) {
-            const container = button.closest('.prose');
-            if (!container) return;
-            
-            const textToCopy = container.querySelector('.message-content').innerText;
-            
-            // Clipboard fallback as specified
-            const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
 
-            const span = button.querySelector('span');
-            const originalText = span.textContent;
-            span.textContent = 'تم النسخ!';
-            button.classList.add('text-emerald-400');
+                list.appendChild(div);
 
-            setTimeout(() => {
-                span.textContent = originalText;
-                button.classList.remove('text-emerald-400');
-            }, 2000);
-        }
+            }
+        );
 
-        function setupEventListeners() {
-            // Form Submit
-            elements.chatForm.addEventListener('submit', handleSendMessage);
-            elements.stopBtn.addEventListener('click', stopGeneration);
 
-            // Auto resize Textarea
-            elements.userPrompt.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
+    } catch (error) {
 
-            // Enter key to send (Shift+Enter for newline)
-            elements.userPrompt.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   ADD QUOTA
+========================================================= */
+
+async function addQuota(email) {
+
+    const input =
+        document.getElementById(
+            "quota_" +
+            escapeAttr(email)
+        );
+
+
+    const amount =
+        Number(input.value);
+
+
+    if (
+        !amount ||
+        amount <= 0
+    ) {
+
+        showNotification(
+            "اكتب كمية صحيحة"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                "add_quota",
+                {
+                    admin_email:
+                        currentUser.email,
+
+                    user_email:
+                        email,
+
+                    amount:
+                        amount
                 }
-            });
+            );
 
-            // Model Selection
-            elements.modelSelect.addEventListener('change', (e) => {
-                appState.selectedModel = e.target.value;
-                saveConfigToStorage();
-                showToast(`تم اختيار الموديل: ${appState.selectedModel}`);
-            });
 
-            elements.refreshModelsBtn.addEventListener('click', () => {
-                checkBackendConnection();
-            });
+        if (!result.success) {
 
-            // Quick Prompts
-            document.querySelectorAll('.quick-prompt').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    elements.userPrompt.value = btn.innerText.replace(/\n/g, ' ').trim();
-                    handleSendMessage();
-                });
-            });
+            throw new Error(
+                result.message
+            );
 
-            // Settings Modal Events
-            elements.openSettingsBtn.addEventListener('click', () => elements.settingsModal.classList.remove('hidden'));
-            elements.closeSettingsBtn.addEventListener('click', () => elements.settingsModal.classList.add('hidden'));
-            elements.tempInput.addEventListener('input', (e) => elements.tempValue.textContent = e.target.value);
-
-            elements.saveSettingsBtn.addEventListener('click', () => {
-                appState.backendUrl = elements.backendUrlInput.value.trim();
-                appState.apiKey = elements.apiKeyInput.value.trim();
-                appState.systemPrompt = elements.systemPromptInput.value.trim();
-                appState.temperature = parseFloat(elements.tempInput.value);
-                appState.stream = elements.streamToggle.checked;
-
-                saveConfigToStorage();
-                updateUrlDisplay();
-                elements.settingsModal.classList.add('hidden');
-                showToast('تم حفظ الإعدادات بنجاح');
-                checkBackendConnection();
-            });
-
-            // Mobile Sidebar Toggles
-            elements.openSidebarMobile.addEventListener('click', () => {
-                elements.sidebar.classList.remove('-right-72');
-                elements.sidebar.classList.add('right-0');
-                elements.sidebarOverlay.classList.remove('hidden');
-            });
-
-            const closeSidebar = () => {
-                elements.sidebar.classList.add('-right-72');
-                elements.sidebar.classList.remove('right-0');
-                elements.sidebarOverlay.classList.add('hidden');
-            };
-
-            elements.closeSidebarMobile.addEventListener('click', closeSidebar);
-            elements.sidebarOverlay.addEventListener('click', closeSidebar);
-
-            // History Actions
-            elements.newChatBtn.addEventListener('click', createNewChat);
-            elements.clearHistoryBtn.addEventListener('click', () => {
-                appState.chats = [];
-                appState.activeChatId = null;
-                saveChatsToStorage();
-                renderHistoryList();
-                renderMessages();
-                showToast('تم مسح جميع المحادثات');
-            });
         }
 
-        // Initialize application when page loads
-        window.onload = initApp;
-    </script>
+
+        showNotification(
+            "تمت إضافة " +
+            amount +
+            " رسالة"
+        );
+
+
+        await loadUsers();
+
+
+    } catch (error) {
+
+        showNotification(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    if (
+        currentUser.role !==
+        "admin" &&
+        Number(currentUser.quota) <= 0
+    ) {
+
+        showNotification(
+            "لا يمكنك تسجيل الخروج بعد انتهاء الكوست"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        typeof google !==
+            "undefined" &&
+        google.accounts &&
+        google.accounts.id
+    ) {
+
+        google.accounts.id.disableAutoSelect();
+
+    }
+
+
+    currentUser = null;
+
+
+    if (messagesTimer) {
+
+        clearInterval(
+            messagesTimer
+        );
+
+        messagesTimer = null;
+
+    }
+
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("loginPage")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("messages")
+        .innerHTML = "";
+
+
+    document
+        .getElementById("usersList")
+        .innerHTML = "";
+
+}
+
+
+/* =========================================================
+   POLLING / NOTIFICATIONS
+========================================================= */
+
+function startPolling() {
+
+    if (messagesTimer) {
+
+        clearInterval(
+            messagesTimer
+        );
+
+    }
+
+
+    messagesTimer =
+        setInterval(
+            async () => {
+
+                await loadMessages();
+
+
+                if (
+                    currentUser &&
+                    currentUser.role ===
+                    "admin"
+                ) {
+
+                    await loadUsers();
+
+                }
+
+            },
+            5000
+        );
+
+}
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+function showNotification(text) {
+
+    const box =
+        document.getElementById(
+            "notification"
+        );
+
+
+    box.textContent =
+        text;
+
+
+    box.classList.remove(
+        "hidden"
+    );
+
+
+    setTimeout(
+        () => {
+
+            box.classList.add(
+                "hidden"
+            );
+
+        },
+        3000
+    );
+
+}
+
+
+function showLoginError(text) {
+
+    document
+        .getElementById("loginError")
+        .textContent =
+            text;
+
+}
+
+
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        String(value);
+
+    return div.innerHTML;
+
+}
+
+
+function escapeAttr(value) {
+
+    return String(value)
+        .replace(
+            /[^a-zA-Z0-9_-]/g,
+            "_"
+        );
+
+}
+
+
+function escapeJs(value) {
+
+    return String(value)
+        .replaceAll(
+            "\\",
+            "\\\\"
+        )
+        .replaceAll(
+            "'",
+            "\\'"
+        );
+
+}
+
+</script>
+
 </body>
 </html>
