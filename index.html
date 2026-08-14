@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Remo AI</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+    --bg:#070b14;
+    --panel:rgba(15,23,42,.72);
+    --panel2:rgba(255,255,255,.045);
+    --border:rgba(255,255,255,.09);
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --purple:#7c3aed;
+    --cyan:#06b6d4;
+    --danger:#ef4444;
+    --success:#22c55e;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(124,58,237,.22),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(6,182,212,.16),transparent 28%),
+        #070b14;
+    color:var(--text);
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    overflow:hidden;
+}
+
+.app{
+    height:100vh;
+    display:flex;
+    padding:16px;
+    gap:16px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:270px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    background:var(--panel);
+    backdrop-filter:blur(25px);
+    border:1px solid var(--border);
+    border-radius:24px;
+    overflow:hidden;
+}
+
+.brand{
+    padding:23px;
+    border-bottom:1px solid var(--border);
+}
+
+.brand-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    border-radius:15px;
+    font-size:24px;
+    font-weight:900;
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    box-shadow:0 12px 35px rgba(124,58,237,.3);
+}
+
+.brand h1{font-size:21px}
+.brand p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.sidebar-body{
+    flex:1;
+    padding:18px;
+}
+
+.new-chat{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:14px;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    background:linear-gradient(135deg,var(--purple),#9333ea);
+}
+
+.title{
+    color:var(--muted);
+    font-size:11px;
+    margin:25px 3px 10px;
+}
+
+.status{
+    padding:15px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:rgba(255,255,255,.03);
+}
+
+.status-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--danger);
+}
+
+.dot.online{
+    background:var(--success);
+    box-shadow:0 0 12px rgba(34,197,94,.7);
+}
+
+.model{
+    margin-top:9px;
+    color:var(--muted);
+    font-size:11px;
+    direction:ltr;
+    text-align:left;
+}
+
+.footer{
+    padding:16px;
+    border-top:1px solid var(--border);
+}
+
+.clear{
+    width:100%;
+    padding:11px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+    color:#cbd5e1;
+    cursor:pointer;
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    background:rgba(15,23,42,.58);
+    backdrop-filter:blur(25px);
+    border:1px solid var(--border);
+    border-radius:24px;
+    overflow:hidden;
+}
+
+.header{
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 22px;
+    border-bottom:1px solid var(--border);
+}
+
+.header h2{font-size:17px}
+
+.header small{
+    display:block;
+    color:var(--muted);
+    margin-top:3px;
+    font-size:10px;
+}
+
+.connection{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* CHAT */
+
+.chat{
+    flex:1;
+    overflow-y:auto;
+    padding:28px;
+}
+
+.chat::-webkit-scrollbar{width:6px}
+.chat::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.1);
+    border-radius:10px;
+}
+
+.welcome{
+    max-width:700px;
+    margin:9vh auto 0;
+    text-align:center;
+}
+
+.welcome-icon{
+    width:78px;
+    height:78px;
+    margin:auto auto 20px;
+    display:grid;
+    place-items:center;
+    border-radius:25px;
+    font-size:35px;
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    box-shadow:0 20px 60px rgba(124,58,237,.25);
+}
+
+.welcome h3{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.welcome p{
+    color:var(--muted);
+    line-height:1.8;
+    font-size:14px;
+}
+
+.suggestions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:25px;
+}
+
+.suggestion{
+    padding:15px;
+    text-align:right;
+    color:#dbeafe;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--border);
+    border-radius:15px;
+    cursor:pointer;
+}
+
+.suggestion:hover{
+    background:rgba(255,255,255,.07);
+}
+
+.message{
+    max-width:900px;
+    margin:0 auto 20px;
+    display:flex;
+    gap:11px;
+}
+
+.message.user{
+    flex-direction:row-reverse;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:rgba(255,255,255,.07);
+    border:1px solid var(--border);
+    font-size:12px;
+    font-weight:800;
+}
+
+.assistant .avatar{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+}
+
+.bubble{
+    max-width:calc(100% - 50px);
+    padding:14px 17px;
+    border-radius:18px;
+    line-height:1.8;
+    font-size:14px;
+    word-break:break-word;
+}
+
+.user .bubble{
+    background:linear-gradient(135deg,#5b21b6,#7c3aed);
+    border-bottom-right-radius:5px;
+}
+
+.assistant .bubble{
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+    border-bottom-left-radius:5px;
+}
+
+.bubble pre{
+    direction:ltr;
+    text-align:left;
+    overflow:auto;
+    padding:14px;
+    margin:12px 0;
+    background:#020617;
+    border-radius:12px;
+    font-family:Consolas,monospace;
+    font-size:12px;
+}
+
+.bubble code{
+    direction:ltr;
+    background:#020617;
+    padding:3px 6px;
+    border-radius:5px;
+}
+
+/* COMPOSER */
+
+.composer-area{
+    padding:14px 22px 19px;
+    border-top:1px solid var(--border);
+}
+
+.composer{
+    max-width:950px;
+    margin:auto;
+    display:flex;
+    align-items:flex-end;
+    gap:9px;
+    padding:9px;
+    border-radius:18px;
+    background:rgba(2,6,23,.55);
+    border:1px solid var(--border);
+}
+
+textarea{
+    flex:1;
+    min-height:44px;
+    max-height:180px;
+    resize:none;
+    outline:none;
+    border:0;
+    background:transparent;
+    color:#fff;
+    padding:10px 12px;
+    line-height:1.6;
+}
+
+textarea::placeholder{color:#64748b}
+
+.send,
+.stop{
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    cursor:pointer;
+}
+
+.send{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+}
+
+.stop{
+    display:none;
+    background:rgba(239,68,68,.18);
+    color:#fca5a5;
+}
+
+.hint{
+    text-align:center;
+    color:#64748b;
+    font-size:10px;
+    margin-top:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+    .app{padding:7px}
+    .sidebar{display:none}
+    .main{border-radius:18px}
+    .chat{padding:18px 12px}
+    .header{padding:12px 14px}
+    .suggestions{grid-template-columns:1fr}
+    .welcome h3{font-size:25px}
+    .composer-area{padding:10px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-row">
+                <div class="logo">R</div>
+                <div>
+                    <h1>Remo AI</h1>
+                    <p>LiteLLM • Ollama</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-body">
+
+            <button class="new-chat" onclick="newChat()">
+                ＋ محادثة جديدة
+            </button>
+
+            <div class="title">حالة الاتصال</div>
+
+            <div class="status">
+
+                <div class="status-row">
+                    <span id="statusDot" class="dot"></span>
+                    <span id="statusText">Checking...</span>
+                </div>
+
+                <div class="model">
+                    remo
+                </div>
+
+            </div>
+
+            <div class="title">Backend</div>
+
+            <div style="color:#64748b;font-size:12px;line-height:1.8">
+                Remo يعمل من خلال LiteLLM
+                والمتصل بـ Ollama.
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <button class="clear" onclick="clearChat()">
+                🗑 مسح المحادثة
+            </button>
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+                <h2>Remo</h2>
+                <small>qwen2.5-coder:14b</small>
+            </div>
+
+            <div class="connection">
+                <span id="connectionDot" class="dot"></span>
+                <span id="connectionText">Checking...</span>
+            </div>
+
+        </header>
+
+
+        <section id="chat" class="chat">
+
+            <div id="welcome" class="welcome">
+
+                <div class="welcome-icon">✦</div>
+
+                <h3>أهلاً بيك مع Remo</h3>
+
+                <p>
+                    مساعدك البرمجي الشخصي.
+                    اسأله عن PHP أو JavaScript أو Docker
+                    أو أي مشكلة برمجية.
+                </p>
+
+                <div class="suggestions">
+
+                    <button class="suggestion"
+                        onclick="suggest('اعمل لي صفحة HTML احترافية كاملة')">
+                        🎨 اعمل صفحة HTML
+                    </button>
+
+                    <button class="suggestion"
+                        onclick="suggest('اشرح لي المشكلة الموجودة في الكود ده')">
+                        🔍 حل مشكلة في الكود
+                    </button>
+
+                    <button class="suggestion"
+                        onclick="suggest('اكتب لي API باستخدام PHP')">
+                        ⚡ اعمل PHP API
+                    </button>
+
+                    <button class="suggestion"
+                        onclick="suggest('راجع الكود وحسنه من ناحية الأداء والأمان')">
+                        🛠 راجع الكود
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <div class="composer-area">
+
+            <div class="composer">
+
+                <textarea
+                    id="input"
+                    placeholder="اكتب رسالتك لـ Remo..."
+                    rows="1"></textarea>
+
+                <button
+                    id="send"
+                    class="send"
+                    onclick="sendMessage()">➤</button>
+
+                <button
+                    id="stop"
+                    class="stop"
+                    onclick="stop()">■</button>
+
+            </div>
+
+            <div class="hint">
+                Enter للإرسال • Shift + Enter لسطر جديد
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   CONFIG
+========================================== */
+
+const API =
+"https://transmission-foreign-models-audit.trycloudflare.com";
+
+const MODEL = "remo";
+
+const STORAGE = "remo_litellm_chat";
+
+
+/* ==========================================
+   STATE
+========================================== */
+
+let messages = [];
+
+let controller = null;
+
+let generating = false;
+
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const chat =
+document.getElementById("chat");
+
+const input =
+document.getElementById("input");
+
+const sendButton =
+document.getElementById("send");
+
+const stopButton =
+document.getElementById("stop");
+
+const statusDot =
+document.getElementById("statusDot");
+
+const statusText =
+document.getElementById("statusText");
+
+const connectionDot =
+document.getElementById("connectionDot");
+
+const connectionText =
+document.getElementById("connectionText");
+
+
+/* ==========================================
+   START
+========================================== */
+
+window.addEventListener("load", () => {
+
+    loadHistory();
+
+    checkLiteLLM();
+
+});
+
+
+/* ==========================================
+   CHECK LITELLM
+========================================== */
+
+async function checkLiteLLM(){
+
+    setStatus(false,"Checking...");
+
+    try{
+
+        const response =
+        await fetch(
+            API + "/v1/models",
+            {
+                method:"GET",
+                cache:"no-store"
+            }
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const data =
+        await response.json();
+
+        const models =
+        Array.isArray(data.data)
+        ? data.data
+        : [];
+
+        const found =
+        models.some(model =>
+            model.id === MODEL ||
+            model.id?.includes(MODEL)
+        );
+
+        if(found){
+
+            setStatus(
+                true,
+                "Remo متصل"
+            );
+
+        }else{
+
+            setStatus(
+                false,
+                "LiteLLM متصل لكن Remo غير ظاهر"
+            );
+
+            console.log(
+                "LiteLLM models:",
+                models
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "LiteLLM connection error:",
+            error
+        );
+
+        setStatus(
+            false,
+            "فشل الاتصال بـ LiteLLM"
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+function setStatus(online,text){
+
+    statusText.textContent = text;
+
+    connectionText.textContent = text;
+
+    if(online){
+
+        statusDot.classList.add("online");
+
+        connectionDot.classList.add("online");
+
+    }else{
+
+        statusDot.classList.remove("online");
+
+        connectionDot.classList.remove("online");
+
+    }
+
+}
+
+
+/* ==========================================
+   SEND
+========================================== */
+
+async function sendMessage(){
+
+    if(generating) return;
+
+    const text =
+    input.value.trim();
+
+    if(!text) return;
+
+    addMessage(
+        "user",
+        text
+    );
+
+    messages.push({
+        role:"user",
+        content:text
+    });
+
+    saveHistory();
+
+    input.value = "";
+
+    resizeInput();
+
+    document.getElementById("welcome").style.display =
+    "none";
+
+    generating = true;
+
+    sendButton.style.display = "none";
+
+    stopButton.style.display = "grid";
+
+    controller =
+    new AbortController();
+
+
+    const assistant =
+    createAssistant();
+
+    const bubble =
+    assistant.querySelector(".bubble");
+
+
+    try{
+
+        const response =
+        await fetch(
+            API + "/v1/chat/completions",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    model:MODEL,
+
+                    messages:messages,
+
+                    stream:true,
+
+                    temperature:0.3
+
+                }),
+
+                signal:controller.signal
+
+            }
+        );
+
+
+        if(!response.ok){
+
+            const error =
+            await response.text();
+
+            throw new Error(
+                "HTTP " +
+                response.status +
+                ": " +
+                error
+            );
+
+        }
+
+
+        const reader =
+        response.body.getReader();
+
+        const decoder =
+        new TextDecoder();
+
+        let buffer = "";
+
+        let full = "";
+
+
+        while(true){
+
+            const {
+                value,
+                done
+            } =
+            await reader.read();
+
+            if(done) break;
+
+            buffer +=
+            decoder.decode(
+                value,
+                {stream:true}
+            );
+
+
+            const lines =
+            buffer.split("\n");
+
+            buffer =
+            lines.pop() || "";
+
+
+            for(const line of lines){
+
+                let clean =
+                line.trim();
+
+                if(!clean) continue;
+
+                if(clean.startsWith("data:")){
+
+                    clean =
+                    clean.substring(5).trim();
+
+                }
+
+
+                if(clean === "[DONE]"){
+
+                    continue;
+
+                }
+
+
+                try{
+
+                    const data =
+                    JSON.parse(clean);
+
+                    const content =
+                    data.choices?.[0]?.delta?.content
+                    || "";
+
+                    if(content){
+
+                        full += content;
+
+                        bubble.innerHTML =
+                        format(full);
+
+                        scroll();
+
+                    }
+
+                }catch(e){
+
+                    console.warn(
+                        "Chunk parse error:",
+                        clean
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        if(!full){
+
+            bubble.textContent =
+            "Remo لم يرجع أي محتوى.";
+
+        }
+
+
+        messages.push({
+            role:"assistant",
+            content:full
+        });
+
+        saveHistory();
+
+
+    }catch(error){
+
+        if(error.name === "AbortError"){
+
+            bubble.innerHTML =
+            "<span style='color:#fca5a5'>تم إيقاف التوليد.</span>";
+
+        }else{
+
+            console.error(error);
+
+            bubble.innerHTML =
+            `
+            <div style="color:#fca5a5">
+                <strong>فشل الاتصال بـ Remo</strong>
+                <br><br>
+                ${escapeHTML(error.message)}
+                <br><br>
+                تأكد أن LiteLLM يسمح بـ CORS
+                وأن endpoint التالي يعمل:
+                <br><br>
+                <code>/v1/chat/completions</code>
+            </div>
+            `;
+
+        }
+
+    }finally{
+
+        generating = false;
+
+        controller = null;
+
+        sendButton.style.display = "grid";
+
+        stopButton.style.display = "none";
+
+    }
+
+}
+
+
+/* ==========================================
+   ASSISTANT MESSAGE
+========================================== */
+
+function createAssistant(){
+
+    const wrapper =
+    document.createElement("div");
+
+    wrapper.className =
+    "message assistant";
+
+
+    const avatar =
+    document.createElement("div");
+
+    avatar.className =
+    "avatar";
+
+    avatar.textContent = "R";
+
+
+    const bubble =
+    document.createElement("div");
+
+    bubble.className =
+    "bubble";
+
+
+    wrapper.appendChild(avatar);
+
+    wrapper.appendChild(bubble);
+
+    chat.appendChild(wrapper);
+
+    scroll();
+
+    return wrapper;
+
+}
+
+
+/* ==========================================
+   NORMAL MESSAGE
+========================================== */
+
+function addMessage(role,text){
+
+    const wrapper =
+    document.createElement("div");
+
+    wrapper.className =
+    "message " + role;
+
+
+    const avatar =
+    document.createElement("div");
+
+    avatar.className =
+    "avatar";
+
+    avatar.textContent =
+    role === "user"
+    ? "أنت"
+    : "R";
+
+
+    const bubble =
+    document.createElement("div");
+
+    bubble.className =
+    "bubble";
+
+    bubble.innerHTML =
+    format(text);
+
+
+    wrapper.appendChild(avatar);
+
+    wrapper.appendChild(bubble);
+
+    chat.appendChild(wrapper);
+
+    scroll();
+
+}
+
+
+/* ==========================================
+   FORMAT
+========================================== */
+
+function format(text){
+
+    let safe =
+    escapeHTML(text);
+
+
+    safe =
+    safe.replace(
+        /```([\s\S]*?)```/g,
+        "<pre>$1</pre>"
+    );
+
+
+    safe =
+    safe.replace(
+        /`([^`]+)`/g,
+        "<code>$1</code>"
+    );
+
+
+    safe =
+    safe.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+
+    safe =
+    safe.replace(
+        /\n/g,
+        "<br>"
+    );
+
+
+    return safe;
+
+}
+
+
+function escapeHTML(text){
+
+    const div =
+    document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* ==========================================
+   STOP
+========================================== */
+
+function stop(){
+
+    if(controller){
+
+        controller.abort();
+
+    }
+
+}
+
+
+/* ==========================================
+   NEW CHAT
+========================================== */
+
+function newChat(){
+
+    if(generating){
+
+        stop();
+
+    }
+
+    messages = [];
+
+    localStorage.removeItem(STORAGE);
+
+    location.reload();
+
+}
+
+
+function clearChat(){
+
+    if(confirm("مسح المحادثة؟")){
+
+        newChat();
+
+    }
+
+}
+
+
+/* ==========================================
+   SUGGESTION
+========================================== */
+
+function suggest(text){
+
+    input.value = text;
+
+    resizeInput();
+
+    input.focus();
+
+}
+
+
+/* ==========================================
+   INPUT
+========================================== */
+
+input.addEventListener(
+    "input",
+    resizeInput
+);
+
+function resizeInput(){
+
+    input.style.height = "auto";
+
+    input.style.height =
+    Math.min(
+        input.scrollHeight,
+        180
+    ) + "px";
+
+}
+
+
+input.addEventListener(
+    "keydown",
+    e => {
+
+        if(
+            e.key === "Enter" &&
+            !e.shiftKey
+        ){
+
+            e.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* ==========================================
+   HISTORY
+========================================== */
+
+function saveHistory(){
+
+    localStorage.setItem(
+        STORAGE,
+        JSON.stringify(messages)
+    );
+
+}
+
+
+function loadHistory(){
+
+    try{
+
+        const saved =
+        localStorage.getItem(STORAGE);
+
+        if(!saved) return;
+
+        messages =
+        JSON.parse(saved);
+
+        if(!Array.isArray(messages)){
+
+            messages = [];
+
+            return;
+
+        }
+
+        for(const message of messages){
+
+            if(
+                message.role === "user" ||
+                message.role === "assistant"
+            ){
+
+                addMessage(
+                    message.role,
+                    message.content
+                );
+
+            }
+
+        }
+
+        const welcome =
+        document.getElementById("welcome");
+
+        if(welcome && messages.length){
+
+            welcome.style.display = "none";
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        messages = [];
+
+    }
+
+}
+
+
+/* ==========================================
+   SCROLL
+========================================== */
+
+function scroll(){
+
+    requestAnimationFrame(() => {
+
+        chat.scrollTop =
+        chat.scrollHeight;
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
