@@ -1,1325 +1,1303 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>REMO AI</title>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, Tahoma, sans-serif;
-            background:
-                radial-gradient(circle at top right, #243b70 0%, transparent 35%),
-                radial-gradient(circle at bottom left, #111c3a 0%, transparent 35%),
-                #070b16;
-            color: #fff;
-        }
-
-        button,
-        input,
-        textarea {
-            font-family: inherit;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* LOGIN */
-
-        #loginScreen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-card {
-            width: min(430px, 100%);
-            padding: 40px 30px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 28px;
-            background: rgba(15,20,35,.82);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 30px 80px rgba(0,0,0,.45);
-        }
-
-        .logo {
-            width: 76px;
-            height: 76px;
-            margin: 0 auto 20px;
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 38px;
-            font-weight: bold;
-            background: linear-gradient(135deg,#635bff,#00b7ff);
-        }
-
-        .login-card h1 {
-            margin: 0 0 10px;
-            font-size: 30px;
-        }
-
-        .login-card p {
-            color: #aeb8d0;
-            margin-bottom: 30px;
-        }
-
-        #googleButton {
-            display: flex;
-            justify-content: center;
-            min-height: 44px;
-        }
-
-        .error {
-            color: #ff7b8a;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        /* APP */
-
-        #app {
-            min-height: 100vh;
-        }
-
-        .topbar {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            min-height: 70px;
-            padding: 12px 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-            background: rgba(7,11,22,.82);
-            backdrop-filter: blur(18px);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: bold;
-        }
-
-        .mini-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg,#635bff,#00b7ff);
-        }
-
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .quota {
-            padding: 9px 14px;
-            border-radius: 12px;
-            background: rgba(255,255,255,.08);
-            color: #dce5ff;
-            font-size: 13px;
-        }
-
-        .logout {
-            border: 0;
-            border-radius: 10px;
-            padding: 9px 13px;
-            cursor: pointer;
-            color: white;
-            background: #e5484d;
-        }
-
-        .logout:disabled {
-            opacity: .45;
-            cursor: not-allowed;
-        }
-
-        .layout {
-            width: min(1250px, 100%);
-            margin: auto;
-            padding: 25px;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 20px;
-        }
-
-        .panel {
-            border: 1px solid rgba(255,255,255,.09);
-            border-radius: 22px;
-            background: rgba(15,20,35,.75);
-            backdrop-filter: blur(18px);
-        }
-
-        .sidebar {
-            padding: 20px;
-        }
-
-        .profile {
-            text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-        }
-
-        .profile img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile h3 {
-            margin: 10px 0 4px;
-        }
-
-        .profile small {
-            color: #8e99b5;
-            word-break: break-word;
-        }
-
-        .role {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            background: rgba(99,91,255,.2);
-            color: #a9a2ff;
-        }
-
-        .side-button {
-            width: 100%;
-            margin-top: 12px;
-            padding: 12px;
-            border: 0;
-            border-radius: 12px;
-            cursor: pointer;
-            color: white;
-            background: rgba(255,255,255,.07);
-        }
-
-        .side-button:hover {
-            background: rgba(255,255,255,.12);
-        }
-
-        /* CHAT */
-
-        .chat-panel {
-            min-height: 700px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .chat-header {
-            padding: 18px 20px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-        }
-
-        .chat-header h2 {
-            margin: 0 0 5px;
-        }
-
-        .chat-header span {
-            color: #8e99b5;
-            font-size: 13px;
-        }
-
-        #messages {
-            flex: 1;
-            min-height: 500px;
-            max-height: 600px;
-            overflow-y: auto;
-            padding: 25px;
-        }
-
-        .message {
-            max-width: 80%;
-            margin-bottom: 15px;
-            padding: 13px 16px;
-            border-radius: 17px;
-            line-height: 1.7;
-            white-space: pre-wrap;
-        }
-
-        .message.user {
-            margin-right: auto;
-            background: linear-gradient(135deg,#635bff,#4361ee);
-        }
-
-        .message.ai {
-            margin-left: auto;
-            background: rgba(255,255,255,.08);
-        }
-
-        .message.system {
-            max-width: 100%;
-            text-align: center;
-            color: #8e99b5;
-            background: transparent;
-        }
-
-        .composer {
-            padding: 18px;
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid rgba(255,255,255,.08);
-        }
-
-        #prompt {
-            flex: 1;
-            min-height: 50px;
-            max-height: 140px;
-            resize: vertical;
-            padding: 14px;
-            border: 1px solid rgba(255,255,255,.1);
-            outline: none;
-            border-radius: 14px;
-            color: white;
-            background: rgba(0,0,0,.2);
-        }
-
-        #sendButton {
-            width: 110px;
-            border: 0;
-            border-radius: 14px;
-            cursor: pointer;
-            color: white;
-            background: linear-gradient(135deg,#635bff,#00a8ff);
-        }
-
-        #sendButton:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-        }
-
-        /* ADMIN */
-
-        #adminPanel {
-            width: min(1250px, calc(100% - 50px));
-            margin: 0 auto 30px;
-            padding: 20px;
-        }
-
-        .admin-title {
-            margin-bottom: 15px;
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .users-table th,
-        .users-table td {
-            padding: 12px;
-            text-align: right;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-        }
-
-        .users-table th {
-            color: #9aa6c2;
-        }
-
-        .quota-input {
-            width: 90px;
-            padding: 8px;
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 8px;
-            outline: none;
-            color: white;
-            background: #101728;
-        }
-
-        .add-quota {
-            padding: 8px 12px;
-            border: 0;
-            border-radius: 8px;
-            cursor: pointer;
-            color: white;
-            background: #2f9e44;
-        }
-
-        .notification {
-            position: fixed;
-            left: 20px;
-            bottom: 20px;
-            z-index: 100;
-            max-width: 340px;
-            padding: 15px 18px;
-            border-radius: 14px;
-            background: #1c2540;
-            box-shadow: 0 15px 40px rgba(0,0,0,.4);
-            display: none;
-        }
-
-        @media(max-width: 800px) {
-            .layout {
-                grid-template-columns: 1fr;
-                padding: 12px;
-            }
-
-            .sidebar {
-                order: 2;
-            }
-
-            .chat-panel {
-                min-height: 600px;
-            }
-
-            #messages {
-                min-height: 400px;
-            }
-
-            .topbar {
-                padding: 10px;
-            }
-
-            .user-email {
-                display: none;
-            }
-
-            #adminPanel {
-                width: calc(100% - 24px);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Remo AI</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+    --bg:#070b14;
+    --panel:rgba(15,23,42,.72);
+    --panel2:rgba(255,255,255,.045);
+    --border:rgba(255,255,255,.09);
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --purple:#7c3aed;
+    --cyan:#06b6d4;
+    --danger:#ef4444;
+    --success:#22c55e;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(124,58,237,.22),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(6,182,212,.16),transparent 28%),
+        #070b14;
+    color:var(--text);
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    overflow:hidden;
+}
+
+.app{
+    height:100vh;
+    display:flex;
+    padding:16px;
+    gap:16px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:270px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    background:var(--panel);
+    backdrop-filter:blur(25px);
+    border:1px solid var(--border);
+    border-radius:24px;
+    overflow:hidden;
+}
+
+.brand{
+    padding:23px;
+    border-bottom:1px solid var(--border);
+}
+
+.brand-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    border-radius:15px;
+    font-size:24px;
+    font-weight:900;
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    box-shadow:0 12px 35px rgba(124,58,237,.3);
+}
+
+.brand h1{font-size:21px}
+.brand p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.sidebar-body{
+    flex:1;
+    padding:18px;
+}
+
+.new-chat{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:14px;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    background:linear-gradient(135deg,var(--purple),#9333ea);
+}
+
+.title{
+    color:var(--muted);
+    font-size:11px;
+    margin:25px 3px 10px;
+}
+
+.status{
+    padding:15px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:rgba(255,255,255,.03);
+}
+
+.status-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--danger);
+}
+
+.dot.online{
+    background:var(--success);
+    box-shadow:0 0 12px rgba(34,197,94,.7);
+}
+
+.model{
+    margin-top:9px;
+    color:var(--muted);
+    font-size:11px;
+    direction:ltr;
+    text-align:left;
+}
+
+.footer{
+    padding:16px;
+    border-top:1px solid var(--border);
+}
+
+.clear{
+    width:100%;
+    padding:11px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+    color:#cbd5e1;
+    cursor:pointer;
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    background:rgba(15,23,42,.58);
+    backdrop-filter:blur(25px);
+    border:1px solid var(--border);
+    border-radius:24px;
+    overflow:hidden;
+}
+
+.header{
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 22px;
+    border-bottom:1px solid var(--border);
+}
+
+.header h2{font-size:17px}
+
+.header small{
+    display:block;
+    color:var(--muted);
+    margin-top:3px;
+    font-size:10px;
+}
+
+.connection{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* CHAT */
+
+.chat{
+    flex:1;
+    overflow-y:auto;
+    padding:28px;
+}
+
+.chat::-webkit-scrollbar{width:6px}
+.chat::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.1);
+    border-radius:10px;
+}
+
+.welcome{
+    max-width:700px;
+    margin:9vh auto 0;
+    text-align:center;
+}
+
+.welcome-icon{
+    width:78px;
+    height:78px;
+    margin:auto auto 20px;
+    display:grid;
+    place-items:center;
+    border-radius:25px;
+    font-size:35px;
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    box-shadow:0 20px 60px rgba(124,58,237,.25);
+}
+
+.welcome h3{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.welcome p{
+    color:var(--muted);
+    line-height:1.8;
+    font-size:14px;
+}
+
+.suggestions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:25px;
+}
+
+.suggestion{
+    padding:15px;
+    text-align:right;
+    color:#dbeafe;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--border);
+    border-radius:15px;
+    cursor:pointer;
+}
+
+.suggestion:hover{
+    background:rgba(255,255,255,.07);
+}
+
+.message{
+    max-width:900px;
+    margin:0 auto 20px;
+    display:flex;
+    gap:11px;
+}
+
+.message.user{
+    flex-direction:row-reverse;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:rgba(255,255,255,.07);
+    border:1px solid var(--border);
+    font-size:12px;
+    font-weight:800;
+}
+
+.assistant .avatar{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+}
+
+.bubble{
+    max-width:calc(100% - 50px);
+    padding:14px 17px;
+    border-radius:18px;
+    line-height:1.8;
+    font-size:14px;
+    word-break:break-word;
+}
+
+.user .bubble{
+    background:linear-gradient(135deg,#5b21b6,#7c3aed);
+    border-bottom-right-radius:5px;
+}
+
+.assistant .bubble{
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+    border-bottom-left-radius:5px;
+}
+
+.bubble pre{
+    direction:ltr;
+    text-align:left;
+    overflow:auto;
+    padding:14px;
+    margin:12px 0;
+    background:#020617;
+    border-radius:12px;
+    font-family:Consolas,monospace;
+    font-size:12px;
+}
+
+.bubble code{
+    direction:ltr;
+    background:#020617;
+    padding:3px 6px;
+    border-radius:5px;
+}
+
+/* COMPOSER */
+
+.composer-area{
+    padding:14px 22px 19px;
+    border-top:1px solid var(--border);
+}
+
+.composer{
+    max-width:950px;
+    margin:auto;
+    display:flex;
+    align-items:flex-end;
+    gap:9px;
+    padding:9px;
+    border-radius:18px;
+    background:rgba(2,6,23,.55);
+    border:1px solid var(--border);
+}
+
+textarea{
+    flex:1;
+    min-height:44px;
+    max-height:180px;
+    resize:none;
+    outline:none;
+    border:0;
+    background:transparent;
+    color:#fff;
+    padding:10px 12px;
+    line-height:1.6;
+}
+
+textarea::placeholder{color:#64748b}
+
+.send,
+.stop{
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    cursor:pointer;
+}
+
+.send{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+}
+
+.stop{
+    display:none;
+    background:rgba(239,68,68,.18);
+    color:#fca5a5;
+}
+
+.hint{
+    text-align:center;
+    color:#64748b;
+    font-size:10px;
+    margin-top:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+    .app{padding:7px}
+    .sidebar{display:none}
+    .main{border-radius:18px}
+    .chat{padding:18px 12px}
+    .header{padding:12px 14px}
+    .suggestions{grid-template-columns:1fr}
+    .welcome h3{font-size:25px}
+    .composer-area{padding:10px}
+}
+</style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<section id="loginScreen">
+<div class="app">
 
-    <div class="login-card">
-
-        <div class="logo">R</div>
-
-        <h1>REMO AI</h1>
-
-        <p>سجل الدخول باستخدام حساب Google</p>
-
-        <div id="googleButton"></div>
-
-        <div id="loginError" class="error"></div>
-
-    </div>
-
-</section>
-
-
-<!-- APP -->
-<div id="app" class="hidden">
-
-    <header class="topbar">
+    <aside class="sidebar">
 
         <div class="brand">
-            <div class="mini-logo">R</div>
-            <span>REMO AI</span>
+            <div class="brand-row">
+                <div class="logo">R</div>
+                <div>
+                    <h1>Remo AI</h1>
+                    <p>LiteLLM • Ollama</p>
+                </div>
+            </div>
         </div>
 
-        <div class="user-area">
+        <div class="sidebar-body">
 
-            <div id="quotaBox" class="quota">
-                المتبقي: ...
-            </div>
-
-            <img id="topAvatar"
-                 class="user-avatar"
-                 src=""
-                 alt="">
-
-            <span id="topName" class="user-email"></span>
-
-            <button id="logoutButton"
-                    class="logout"
-                    onclick="logout()">
-                خروج
+            <button class="new-chat" onclick="newChat()">
+                ＋ محادثة جديدة
             </button>
 
-        </div>
+            <div class="title">حالة الاتصال</div>
 
-    </header>
+            <div class="status">
 
+                <div class="status-row">
+                    <span id="statusDot" class="dot"></span>
+                    <span id="statusText">Checking...</span>
+                </div>
 
-    <main class="layout">
-
-        <aside class="sidebar panel">
-
-            <div class="profile">
-
-                <img id="profileAvatar"
-                     src=""
-                     alt="">
-
-                <h3 id="profileName">-</h3>
-
-                <small id="profileEmail">-</small>
-
-                <div id="profileRole" class="role">
-                    Guest
+                <div class="model">
+                    remo
                 </div>
 
             </div>
 
-            <button class="side-button"
-                    onclick="openAdminMessages()">
-                💬 رسائل الإدارة
-            </button>
+            <div class="title">Backend</div>
 
-            <button id="adminButton"
-                    class="side-button hidden"
-                    onclick="loadUsers()">
-                👑 إدارة المستخدمين
-            </button>
-
-        </aside>
-
-
-        <section class="chat-panel panel">
-
-            <div class="chat-header">
-
-                <h2>REMO AI</h2>
-
-                <span>
-                    اسأل الذكاء الاصطناعي
-                </span>
-
+            <div style="color:#64748b;font-size:12px;line-height:1.8">
+                Remo يعمل من خلال LiteLLM
+                والمتصل بـ Ollama.
             </div>
 
+        </div>
 
-            <div id="messages">
+        <div class="footer">
+            <button class="clear" onclick="clearChat()">
+                🗑 مسح المحادثة
+            </button>
+        </div>
 
-                <div class="message system">
-                    أهلاً بك في REMO AI 👋
+    </aside>
+
+
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+                <h2>Remo</h2>
+                <small>qwen2.5-coder:14b</small>
+            </div>
+
+            <div class="connection">
+                <span id="connectionDot" class="dot"></span>
+                <span id="connectionText">Checking...</span>
+            </div>
+
+        </header>
+
+
+        <section id="chat" class="chat">
+
+            <div id="welcome" class="welcome">
+
+                <div class="welcome-icon">✦</div>
+
+                <h3>أهلاً بيك مع Remo</h3>
+
+                <p>
+                    مساعدك البرمجي الشخصي.
+                    اسأله عن PHP أو JavaScript أو Docker
+                    أو أي مشكلة برمجية.
+                </p>
+
+                <div class="suggestions">
+
+                    <button class="suggestion"
+                        onclick="suggest('اعمل لي صفحة HTML احترافية كاملة')">
+                        🎨 اعمل صفحة HTML
+                    </button>
+
+                    <button class="suggestion"
+                        onclick="suggest('اشرح لي المشكلة الموجودة في الكود ده')">
+                        🔍 حل مشكلة في الكود
+                    </button>
+
+                    <button class="suggestion"
+                        onclick="suggest('اكتب لي API باستخدام PHP')">
+                        ⚡ اعمل PHP API
+                    </button>
+
+                    <button class="suggestion"
+                        onclick="suggest('راجع الكود وحسنه من ناحية الأداء والأمان')">
+                        🛠 راجع الكود
+                    </button>
+
                 </div>
-
-            </div>
-
-
-            <div class="composer">
-
-                <textarea
-                    id="prompt"
-                    placeholder="اكتب رسالتك هنا..."
-                    onkeydown="handleKey(event)"
-                ></textarea>
-
-                <button
-                    id="sendButton"
-                    onclick="sendMessage()">
-                    إرسال
-                </button>
 
             </div>
 
         </section>
 
-    </main>
 
+        <div class="composer-area">
 
-    <!-- ADMIN PANEL -->
+            <div class="composer">
 
-    <section id="adminPanel"
-             class="panel hidden">
+                <textarea
+                    id="input"
+                    placeholder="اكتب رسالتك لـ Remo..."
+                    rows="1"></textarea>
 
-        <h2 class="admin-title">
-            👑 إدارة المستخدمين
-        </h2>
+                <button
+                    id="send"
+                    class="send"
+                    onclick="sendMessage()">➤</button>
 
-        <div style="overflow-x:auto">
+                <button
+                    id="stop"
+                    class="stop"
+                    onclick="stop()">■</button>
 
-            <table class="users-table">
+            </div>
 
-                <thead>
-                    <tr>
-                        <th>الاسم</th>
-                        <th>الإيميل</th>
-                        <th>النوع</th>
-                        <th>المستخدم</th>
-                        <th>المتبقي</th>
-                        <th>إضافة Quota</th>
-                    </tr>
-                </thead>
-
-                <tbody id="usersTable"></tbody>
-
-            </table>
+            <div class="hint">
+                Enter للإرسال • Shift + Enter لسطر جديد
+            </div>
 
         </div>
 
-    </section>
+    </main>
 
-</div>
-
-
-<div id="notification"
-     class="notification">
 </div>
 
 
 <script>
 
-const API_URL =
-    "https://ballet-traveller-christmas-monitors.trycloudflare.com/api.php";
+/* ==========================================
+   CONFIG
+========================================== */
 
-const GOOGLE_CLIENT_ID =
-    "610561621500-4fk159dv20phoqb3qj90uc0kqsb9tb1i.apps.googleusercontent.com";
+const API =
+"https://transmission-foreign-models-audit.trycloudflare.com";
 
-let currentUser = null;
+const MODEL = "remo";
 
-
-/* =========================
-   API
-========================= */
-
-async function api(action, data = {}) {
-
-    const response = await fetch(API_URL, {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            action,
-            ...data
-        })
-
-    });
-
-    const text = await response.text();
-
-    let result;
-
-    try {
-        result = JSON.parse(text);
-    } catch {
-        throw new Error(
-            "الـPHP رجع Response غير صالح: " + text
-        );
-    }
-
-    if (!response.ok || result.success === false) {
-        throw new Error(
-            result.message || "حدث خطأ في API"
-        );
-    }
-
-    return result;
-}
+const STORAGE = "remo_litellm_chat";
 
 
-/* =========================
-   GOOGLE LOGIN
-========================= */
+/* ==========================================
+   STATE
+========================================== */
 
-function initGoogle() {
+let messages = [];
 
-    if (!window.google ||
-        !google.accounts ||
-        !google.accounts.id) {
+let controller = null;
 
-        setTimeout(initGoogle, 500);
-        return;
-    }
-
-    google.accounts.id.initialize({
-
-        client_id: GOOGLE_CLIENT_ID,
-
-        callback: googleLogin,
-
-        auto_select: false,
-
-        cancel_on_tap_outside: true
-
-    });
+let generating = false;
 
 
-    google.accounts.id.renderButton(
+/* ==========================================
+   ELEMENTS
+========================================== */
 
-        document.getElementById("googleButton"),
+const chat =
+document.getElementById("chat");
 
-        {
-            theme: "filled_black",
-            size: "large",
-            text: "signin_with",
-            shape: "pill",
-            width: 300
-        }
+const input =
+document.getElementById("input");
 
-    );
-}
+const sendButton =
+document.getElementById("send");
+
+const stopButton =
+document.getElementById("stop");
+
+const statusDot =
+document.getElementById("statusDot");
+
+const statusText =
+document.getElementById("statusText");
+
+const connectionDot =
+document.getElementById("connectionDot");
+
+const connectionText =
+document.getElementById("connectionText");
 
 
-async function googleLogin(response) {
+/* ==========================================
+   START
+========================================== */
 
-    const errorBox =
-        document.getElementById("loginError");
+window.addEventListener("load", () => {
 
-    errorBox.textContent = "";
+    loadHistory();
 
-    try {
+    checkLiteLLM();
 
-        const result = await api(
-            "login",
+});
+
+
+/* ==========================================
+   CHECK LITELLM
+========================================== */
+
+async function checkLiteLLM(){
+
+    setStatus(false,"Checking...");
+
+    try{
+
+        const response =
+        await fetch(
+            API + "/v1/models",
             {
-                credential: response.credential
+                method:"GET",
+                cache:"no-store"
             }
         );
 
-        currentUser = result.user;
+        if(!response.ok){
 
-        localStorage.setItem(
-            "remo_user",
-            JSON.stringify(currentUser)
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const data =
+        await response.json();
+
+        const models =
+        Array.isArray(data.data)
+        ? data.data
+        : [];
+
+        const found =
+        models.some(model =>
+            model.id === MODEL ||
+            model.id?.includes(MODEL)
         );
 
-        showApp();
+        if(found){
 
-    } catch (error) {
+            setStatus(
+                true,
+                "Remo متصل"
+            );
 
-        console.error(error);
+        }else{
 
-        errorBox.textContent =
-            error.message ||
-            "فشل تسجيل الدخول";
+            setStatus(
+                false,
+                "LiteLLM متصل لكن Remo غير ظاهر"
+            );
 
-    }
-}
+            console.log(
+                "LiteLLM models:",
+                models
+            );
 
+        }
 
-/* =========================
-   SHOW APP
-========================= */
+    }catch(error){
 
-function showApp() {
-
-    document
-        .getElementById("loginScreen")
-        .classList.add("hidden");
-
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-    updateUserUI();
-
-    loadConversation();
-
-    if (currentUser.role === "admin") {
-
-        document
-            .getElementById("adminButton")
-            .classList.remove("hidden");
-
-        loadUsers();
-    }
-}
-
-
-function updateUserUI() {
-
-    if (!currentUser) return;
-
-    document.getElementById("topName").textContent =
-        currentUser.name || currentUser.email;
-
-    document.getElementById("profileName").textContent =
-        currentUser.name || "User";
-
-    document.getElementById("profileEmail").textContent =
-        currentUser.email;
-
-    document.getElementById("profileRole").textContent =
-        currentUser.role === "admin"
-            ? "ADMIN"
-            : "GUEST";
-
-
-    const avatar =
-        currentUser.picture ||
-        "https://www.gravatar.com/avatar/?d=mp";
-
-    document.getElementById("topAvatar").src =
-        avatar;
-
-    document.getElementById("profileAvatar").src =
-        avatar;
-
-
-    updateQuota();
-}
-
-
-function updateQuota() {
-
-    const box =
-        document.getElementById("quotaBox");
-
-    const send =
-        document.getElementById("sendButton");
-
-    const logoutBtn =
-        document.getElementById("logoutButton");
-
-
-    if (currentUser.role === "admin") {
-
-        box.textContent =
-            "المتبقي: ∞";
-
-        send.disabled = false;
-
-        logoutBtn.disabled = false;
-
-        return;
-    }
-
-
-    box.textContent =
-        "المتبقي: " +
-        Number(currentUser.remaining || 0);
-
-
-    if (Number(currentUser.remaining || 0) <= 0) {
-
-        send.disabled = true;
-
-        /*
-         * حسب طلبك:
-         * عند انتهاء الـQuota لا يستطيع Guest
-         * تسجيل الخروج.
-         */
-        logoutBtn.disabled = true;
-
-    } else {
-
-        send.disabled = false;
-        logoutBtn.disabled = false;
-    }
-}
-
-
-/* =========================
-   CHAT
-========================= */
-
-function addMessage(type, text) {
-
-    const container =
-        document.getElementById("messages");
-
-    const div =
-        document.createElement("div");
-
-    div.className =
-        "message " + type;
-
-    div.textContent = text;
-
-    container.appendChild(div);
-
-    container.scrollTop =
-        container.scrollHeight;
-}
-
-
-async function sendMessage() {
-
-    if (!currentUser) return;
-
-    const input =
-        document.getElementById("prompt");
-
-    const button =
-        document.getElementById("sendButton");
-
-    const prompt =
-        input.value.trim();
-
-    if (!prompt) return;
-
-
-    if (
-        currentUser.role !== "admin" &&
-        Number(currentUser.remaining || 0) <= 0
-    ) {
-
-        showNotification(
-            "انتهى الـQuota الخاص بك"
+        console.error(
+            "LiteLLM connection error:",
+            error
         );
 
-        return;
+        setStatus(
+            false,
+            "فشل الاتصال بـ LiteLLM"
+        );
+
     }
 
+}
 
-    addMessage("user", prompt);
+
+/* ==========================================
+   STATUS
+========================================== */
+
+function setStatus(online,text){
+
+    statusText.textContent = text;
+
+    connectionText.textContent = text;
+
+    if(online){
+
+        statusDot.classList.add("online");
+
+        connectionDot.classList.add("online");
+
+    }else{
+
+        statusDot.classList.remove("online");
+
+        connectionDot.classList.remove("online");
+
+    }
+
+}
+
+
+/* ==========================================
+   SEND
+========================================== */
+
+async function sendMessage(){
+
+    if(generating) return;
+
+    const text =
+    input.value.trim();
+
+    if(!text) return;
+
+    addMessage(
+        "user",
+        text
+    );
+
+    messages.push({
+        role:"user",
+        content:text
+    });
+
+    saveHistory();
 
     input.value = "";
 
-    button.disabled = true;
+    resizeInput();
 
-    try {
+    document.getElementById("welcome").style.display =
+    "none";
 
-        const result =
-            await api(
-                "chat",
-                {
-                    email: currentUser.email,
-                    message: prompt
-                }
-            );
+    generating = true;
 
+    sendButton.style.display = "none";
 
-        addMessage(
-            "ai",
-            result.reply || "لم يتم استلام رد."
-        );
+    stopButton.style.display = "grid";
 
+    controller =
+    new AbortController();
 
-        if (result.user) {
 
-            currentUser =
-                result.user;
+    const assistant =
+    createAssistant();
 
-            localStorage.setItem(
-                "remo_user",
-                JSON.stringify(currentUser)
-            );
+    const bubble =
+    assistant.querySelector(".bubble");
 
-            updateUserUI();
-        }
 
+    try{
 
-    } catch (error) {
-
-        console.error(error);
-
-        addMessage(
-            "system",
-            "❌ " + error.message
-        );
-
-    } finally {
-
-        if (
-            currentUser &&
-            (
-                currentUser.role === "admin" ||
-                Number(currentUser.remaining || 0) > 0
-            )
-        ) {
-
-            button.disabled = false;
-        }
-    }
-}
-
-
-function handleKey(event) {
-
-    if (
-        event.key === "Enter" &&
-        !event.shiftKey
-    ) {
-
-        event.preventDefault();
-
-        sendMessage();
-    }
-}
-
-
-/* =========================
-   LOAD CONVERSATION
-========================= */
-
-async function loadConversation() {
-
-    if (!currentUser) return;
-
-    try {
-
-        const result =
-            await api(
-                "history",
-                {
-                    email: currentUser.email
-                }
-            );
-
-
-        const container =
-            document.getElementById("messages");
-
-        container.innerHTML = "";
-
-
-        if (!result.messages ||
-            result.messages.length === 0) {
-
-            addMessage(
-                "system",
-                "أهلاً بك في REMO AI 👋"
-            );
-
-            return;
-        }
-
-
-        result.messages.forEach(message => {
-
-            addMessage(
-                message.role === "user"
-                    ? "user"
-                    : "ai",
-                message.content
-            );
-
-        });
-
-    } catch (error) {
-
-        console.error(error);
-    }
-}
-
-
-/* =========================
-   ADMIN USERS
-========================= */
-
-async function loadUsers() {
-
-    if (!currentUser ||
-        currentUser.role !== "admin") {
-
-        return;
-    }
-
-
-    try {
-
-        const result =
-            await api(
-                "users",
-                {
-                    email: currentUser.email
-                }
-            );
-
-
-        const tbody =
-            document.getElementById("usersTable");
-
-        tbody.innerHTML = "";
-
-
-        result.users.forEach(user => {
-
-            const tr =
-                document.createElement("tr");
-
-            const remaining =
-                user.role === "admin"
-                    ? "∞"
-                    : user.remaining;
-
-
-            tr.innerHTML = `
-
-                <td>${escapeHtml(user.name || "-")}</td>
-
-                <td>${escapeHtml(user.email || "-")}</td>
-
-                <td>${user.role}</td>
-
-                <td>${user.used || 0}</td>
-
-                <td>${remaining}</td>
-
-                <td>
-
-                    ${
-                        user.role === "admin"
-                        ? "-"
-                        : `
-                        <input
-                            id="quota_${encodeURIComponent(user.email)}"
-                            class="quota-input"
-                            type="number"
-                            min="1"
-                            value="100"
-                        >
-
-                        <button
-                            class="add-quota"
-                            onclick="addQuota('${escapeJs(user.email)}')">
-                            + إضافة
-                        </button>
-                        `
-                    }
-
-                </td>
-
-            `;
-
-            tbody.appendChild(tr);
-
-        });
-
-
-        document
-            .getElementById("adminPanel")
-            .classList.remove("hidden");
-
-
-    } catch (error) {
-
-        showNotification(
-            error.message
-        );
-    }
-}
-
-
-async function addQuota(email) {
-
-    const input =
-        document.getElementById(
-            "quota_" +
-            encodeURIComponent(email)
-        );
-
-    const amount =
-        Number(input.value);
-
-
-    if (!amount || amount <= 0) {
-
-        showNotification(
-            "اكتب عدد صحيح أكبر من صفر"
-        );
-
-        return;
-    }
-
-
-    try {
-
-        await api(
-            "add_quota",
+        const response =
+        await fetch(
+            API + "/v1/chat/completions",
             {
-                admin_email:
-                    currentUser.email,
+                method:"POST",
 
-                user_email:
-                    email,
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
 
-                amount
+                body:JSON.stringify({
+
+                    model:MODEL,
+
+                    messages:messages,
+
+                    stream:true,
+
+                    temperature:0.3
+
+                }),
+
+                signal:controller.signal
+
             }
         );
 
 
-        showNotification(
-            "تمت إضافة الـQuota بنجاح ✅"
-        );
+        if(!response.ok){
 
+            const error =
+            await response.text();
 
-        loadUsers();
-
-
-    } catch (error) {
-
-        showNotification(
-            error.message
-        );
-    }
-}
-
-
-/* =========================
-   ADMIN MESSAGES
-========================= */
-
-async function openAdminMessages() {
-
-    if (!currentUser) return;
-
-
-    try {
-
-        const result =
-            await api(
-                "messages",
-                {
-                    email:
-                        currentUser.email
-                }
+            throw new Error(
+                "HTTP " +
+                response.status +
+                ": " +
+                error
             );
 
-
-        if (!result.messages.length) {
-
-            showNotification(
-                "لا توجد رسائل جديدة"
-            );
-
-            return;
         }
 
 
-        result.messages.forEach(message => {
+        const reader =
+        response.body.getReader();
 
-            showNotification(
-                message.from_email +
-                ": " +
-                message.message
+        const decoder =
+        new TextDecoder();
+
+        let buffer = "";
+
+        let full = "";
+
+
+        while(true){
+
+            const {
+                value,
+                done
+            } =
+            await reader.read();
+
+            if(done) break;
+
+            buffer +=
+            decoder.decode(
+                value,
+                {stream:true}
             );
 
+
+            const lines =
+            buffer.split("\n");
+
+            buffer =
+            lines.pop() || "";
+
+
+            for(const line of lines){
+
+                let clean =
+                line.trim();
+
+                if(!clean) continue;
+
+                if(clean.startsWith("data:")){
+
+                    clean =
+                    clean.substring(5).trim();
+
+                }
+
+
+                if(clean === "[DONE]"){
+
+                    continue;
+
+                }
+
+
+                try{
+
+                    const data =
+                    JSON.parse(clean);
+
+                    const content =
+                    data.choices?.[0]?.delta?.content
+                    || "";
+
+                    if(content){
+
+                        full += content;
+
+                        bubble.innerHTML =
+                        format(full);
+
+                        scroll();
+
+                    }
+
+                }catch(e){
+
+                    console.warn(
+                        "Chunk parse error:",
+                        clean
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        if(!full){
+
+            bubble.textContent =
+            "Remo لم يرجع أي محتوى.";
+
+        }
+
+
+        messages.push({
+            role:"assistant",
+            content:full
         });
 
+        saveHistory();
 
-    } catch (error) {
 
-        showNotification(
-            error.message
-        );
+    }catch(error){
+
+        if(error.name === "AbortError"){
+
+            bubble.innerHTML =
+            "<span style='color:#fca5a5'>تم إيقاف التوليد.</span>";
+
+        }else{
+
+            console.error(error);
+
+            bubble.innerHTML =
+            `
+            <div style="color:#fca5a5">
+                <strong>فشل الاتصال بـ Remo</strong>
+                <br><br>
+                ${escapeHTML(error.message)}
+                <br><br>
+                تأكد أن LiteLLM يسمح بـ CORS
+                وأن endpoint التالي يعمل:
+                <br><br>
+                <code>/v1/chat/completions</code>
+            </div>
+            `;
+
+        }
+
+    }finally{
+
+        generating = false;
+
+        controller = null;
+
+        sendButton.style.display = "grid";
+
+        stopButton.style.display = "none";
+
     }
+
 }
 
 
-/* =========================
-   NOTIFICATIONS
-========================= */
+/* ==========================================
+   ASSISTANT MESSAGE
+========================================== */
 
-function showNotification(text) {
+function createAssistant(){
 
-    const box =
-        document.getElementById(
-            "notification"
-        );
+    const wrapper =
+    document.createElement("div");
 
-    box.textContent = text;
-
-    box.style.display = "block";
+    wrapper.className =
+    "message assistant";
 
 
-    clearTimeout(
-        window.notificationTimer
-    );
+    const avatar =
+    document.createElement("div");
+
+    avatar.className =
+    "avatar";
+
+    avatar.textContent = "R";
 
 
-    window.notificationTimer =
-        setTimeout(() => {
+    const bubble =
+    document.createElement("div");
 
-            box.style.display =
-                "none";
+    bubble.className =
+    "bubble";
 
-        }, 4000);
+
+    wrapper.appendChild(avatar);
+
+    wrapper.appendChild(bubble);
+
+    chat.appendChild(wrapper);
+
+    scroll();
+
+    return wrapper;
+
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* ==========================================
+   NORMAL MESSAGE
+========================================== */
 
-function logout() {
+function addMessage(role,text){
 
-    if (!currentUser) return;
+    const wrapper =
+    document.createElement("div");
 
-
-    if (
-        currentUser.role !== "admin" &&
-        Number(currentUser.remaining || 0) <= 0
-    ) {
-
-        showNotification(
-            "لا يمكنك تسجيل الخروج بعد انتهاء الـQuota"
-        );
-
-        return;
-    }
+    wrapper.className =
+    "message " + role;
 
 
-    localStorage.removeItem(
-        "remo_user"
+    const avatar =
+    document.createElement("div");
+
+    avatar.className =
+    "avatar";
+
+    avatar.textContent =
+    role === "user"
+    ? "أنت"
+    : "R";
+
+
+    const bubble =
+    document.createElement("div");
+
+    bubble.className =
+    "bubble";
+
+    bubble.innerHTML =
+    format(text);
+
+
+    wrapper.appendChild(avatar);
+
+    wrapper.appendChild(bubble);
+
+    chat.appendChild(wrapper);
+
+    scroll();
+
+}
+
+
+/* ==========================================
+   FORMAT
+========================================== */
+
+function format(text){
+
+    let safe =
+    escapeHTML(text);
+
+
+    safe =
+    safe.replace(
+        /```([\s\S]*?)```/g,
+        "<pre>$1</pre>"
     );
 
-    currentUser = null;
+
+    safe =
+    safe.replace(
+        /`([^`]+)`/g,
+        "<code>$1</code>"
+    );
+
+
+    safe =
+    safe.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+
+    safe =
+    safe.replace(
+        /\n/g,
+        "<br>"
+    );
+
+
+    return safe;
+
+}
+
+
+function escapeHTML(text){
+
+    const div =
+    document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* ==========================================
+   STOP
+========================================== */
+
+function stop(){
+
+    if(controller){
+
+        controller.abort();
+
+    }
+
+}
+
+
+/* ==========================================
+   NEW CHAT
+========================================== */
+
+function newChat(){
+
+    if(generating){
+
+        stop();
+
+    }
+
+    messages = [];
+
+    localStorage.removeItem(STORAGE);
 
     location.reload();
+
 }
 
 
-/* =========================
-   HELPERS
-========================= */
+function clearChat(){
 
-function escapeHtml(value) {
+    if(confirm("مسح المحادثة؟")){
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        newChat();
+
+    }
+
 }
 
 
-function escapeJs(value) {
+/* ==========================================
+   SUGGESTION
+========================================== */
 
-    return String(value)
-        .replaceAll("\\", "\\\\")
-        .replaceAll("'", "\\'");
+function suggest(text){
+
+    input.value = text;
+
+    resizeInput();
+
+    input.focus();
+
 }
 
 
-/* =========================
-   START
-========================= */
+/* ==========================================
+   INPUT
+========================================== */
 
-window.addEventListener(
-    "load",
-    () => {
+input.addEventListener(
+    "input",
+    resizeInput
+);
 
-        initGoogle();
+function resizeInput(){
+
+    input.style.height = "auto";
+
+    input.style.height =
+    Math.min(
+        input.scrollHeight,
+        180
+    ) + "px";
+
+}
+
+
+input.addEventListener(
+    "keydown",
+    e => {
+
+        if(
+            e.key === "Enter" &&
+            !e.shiftKey
+        ){
+
+            e.preventDefault();
+
+            sendMessage();
+
+        }
 
     }
 );
+
+
+/* ==========================================
+   HISTORY
+========================================== */
+
+function saveHistory(){
+
+    localStorage.setItem(
+        STORAGE,
+        JSON.stringify(messages)
+    );
+
+}
+
+
+function loadHistory(){
+
+    try{
+
+        const saved =
+        localStorage.getItem(STORAGE);
+
+        if(!saved) return;
+
+        messages =
+        JSON.parse(saved);
+
+        if(!Array.isArray(messages)){
+
+            messages = [];
+
+            return;
+
+        }
+
+        for(const message of messages){
+
+            if(
+                message.role === "user" ||
+                message.role === "assistant"
+            ){
+
+                addMessage(
+                    message.role,
+                    message.content
+                );
+
+            }
+
+        }
+
+        const welcome =
+        document.getElementById("welcome");
+
+        if(welcome && messages.length){
+
+            welcome.style.display = "none";
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        messages = [];
+
+    }
+
+}
+
+
+/* ==========================================
+   SCROLL
+========================================== */
+
+function scroll(){
+
+    requestAnimationFrame(() => {
+
+        chat.scrollTop =
+        chat.scrollHeight;
+
+    });
+
+}
 
 </script>
 
